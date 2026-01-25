@@ -22,6 +22,4 @@ public class StudentEntity {
     private String surname;
     @Column(name = "age")
     private String age;
-
-
 }

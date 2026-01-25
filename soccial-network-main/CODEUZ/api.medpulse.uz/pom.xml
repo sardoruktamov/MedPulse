@@ -8,11 +8,12 @@
 		<version>3.3.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>api.giybat.uz</groupId>
-	<artifactId>api.giybat.uz</artifactId>
+	<groupId>uz.medpulse</groupId>
+	<artifactId>api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>api.giybat.uz</name>
-	<description>api.giybat.uz project for Spring Boot</description>
+	<name>api.medpulse.uz</name>
+	<description>MedPulse API (Spring Boot)</description>
+
 	<url/>
 	<licenses>
 		<license/>

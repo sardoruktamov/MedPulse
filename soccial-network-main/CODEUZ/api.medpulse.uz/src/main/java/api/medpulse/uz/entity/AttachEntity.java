@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Setter
 public class AttachEntity {
 
-
     @Id
     private String id;
 
@@ -28,6 +27,4 @@ public class AttachEntity {
     private Boolean visible = true;
     @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now();
-
-
 }

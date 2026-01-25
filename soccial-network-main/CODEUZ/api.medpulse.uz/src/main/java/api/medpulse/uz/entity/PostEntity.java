@@ -45,6 +45,4 @@ public class PostEntity {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private GeneralStatus status;
-
-
 }

@@ -10,22 +10,19 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "sms_history")
+@Table(name = "email_history")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SmsHistoryEntity {
+public class EmailHistoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
-
-    @Column(name = "message")
-    private String message;
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "code")
     private String code;
@@ -33,12 +30,10 @@ public class SmsHistoryEntity {
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    @Column(name = "sms_type")
+    @Column(name = "email_type")
     @Enumerated(EnumType.STRING)
-    private SmsType smsType;
+    private SmsType emailType;
 
     @Column(name = "attempt_count")
     private Integer attemptCount = 0;
-
-
 }
