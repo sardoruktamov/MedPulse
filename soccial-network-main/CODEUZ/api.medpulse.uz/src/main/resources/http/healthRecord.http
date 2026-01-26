@@ -5,18 +5,37 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlc
 
 {
   "patientId": "5dc7b66b-1126-430c-89fa-8c0b5dbcf68a",
-  "diseaseName": "Ich buzilish",
-  "recordDate": "2026-01-22",
-  "doctorName": "Dr.Numonjonaka",
+  "diseaseName": "test",
+  "recordDate": "2026-01-26",
+  "doctorName": "test",
   "hospitalName": null,
-  "treatment": "ikki marta klizma qilish, Erseflora 3 mahal, Seftab 2 mahal",
-  "note": "Kechasi isitmasi tushmadi, tez yordam chaqirmadik, ishtahasi yo'qoldi, Hoddok yeganligi sababi bo'lishi mumkin",
+  "treatment": "test",
+  "note": "test",
   "isCritical": false
 }
 
 ### 2. Tarixni ko'rish (Ro'yxat)
 GET http://localhost:8080/api/v1/health-record/list/5dc7b66b-1126-430c-89fa-8c0b5dbcf68a
-Authorization: Bearer <TOKEN>
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTQyMDUyMCwiZXhwIjoxNzY5NTA2OTIwfQ.Rk6TKPMnKItxB_EZYu1XBs03KZfKVbJlgPpXfGziq8ByC_y0ShELtXMNGasOLfnUrV2HB3DgTCkUlw_Rk3G_pQ
+
+### 3. Tahrirlash (Update)
+PUT http://localhost:8080/api/v1/health-record/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTQyMDUyMCwiZXhwIjoxNzY5NTA2OTIwfQ.Rk6TKPMnKItxB_EZYu1XBs03KZfKVbJlgPpXfGziq8ByC_y0ShELtXMNGasOLfnUrV2HB3DgTCkUlw_Rk3G_pQ
+
+{
+  "diseaseName": "Kuchli grip ,O'tkir shamollash bo'lishi",
+  "recordDate": "2025-09-01",
+  "doctorName": "DR.Numonjonaka",
+  "treatment": "L-montus 1/2 ikki maxal",
+  "note": "Yo'tal, istima",
+  "isCritical": false
+}
+
+### 4. O'chirish (Delete)
+DELETE http://localhost:8080/api/v1/health-record/4
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTQyMDUyMCwiZXhwIjoxNzY5NTA2OTIwfQ.Rk6TKPMnKItxB_EZYu1XBs03KZfKVbJlgPpXfGziq8ByC_y0ShELtXMNGasOLfnUrV2HB3DgTCkUlw_Rk3G_pQ
+
 
 ### Login
 POST localhost:8080/api/v1/auth/login

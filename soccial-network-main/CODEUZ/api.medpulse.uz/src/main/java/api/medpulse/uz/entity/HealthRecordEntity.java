@@ -1,5 +1,6 @@
 package api.medpulse.uz.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,5 +43,6 @@ public class HealthRecordEntity {
     // 4. Bog'liqlik
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")
+    @JsonIgnore
     private PatientProfileEntity patient;
 }

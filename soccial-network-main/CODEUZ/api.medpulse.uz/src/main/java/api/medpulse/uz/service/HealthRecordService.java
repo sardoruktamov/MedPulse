@@ -1,6 +1,8 @@
 package api.medpulse.uz.service;
 
+import api.medpulse.uz.dto.AppResponse;
 import api.medpulse.uz.dto.HealthRecord.HealthRecordCreateDTO;
+import api.medpulse.uz.dto.HealthRecord.HealthRecordUpdateDTO;
 import api.medpulse.uz.entity.HealthRecordEntity;
 import api.medpulse.uz.entity.PatientProfileEntity;
 import api.medpulse.uz.exps.AppBadException;
@@ -50,6 +52,57 @@ public class HealthRecordService {
         if (dto.getPhotoId() != null) entity.setPhotoId(dto.getPhotoId());
 
         return healthRecordRepository.save(entity);
+    }
+
+    /**
+     * 3. Tahrirlash (Update)
+     */
+    public HealthRecordEntity update(Long id, HealthRecordUpdateDTO dto) {
+        // 1. Joriy foydalanuvchi (Ota)
+        Integer currentUserId = SpringSecurityUtil.getCurrentUserId();
+
+        // 2. Yozuvni topamiz
+        HealthRecordEntity entity = healthRecordRepository.findById(id)
+                .orElseThrow(() -> new AppBadException("Kasallik tarixi topilmadi"));
+
+        // 3. XAVFSIZLIK: Bu yozuv egasi shu odammi?
+        // entity -> getPatient() -> getOwner() -> getId()
+        if (!entity.getPatient().getOwner().getId().equals(currentUserId)) {
+            throw new AppBadException("Sizda bu yozuvni tahrirlash huquqi yo'q");
+        }
+
+        // 4. O'zgartirish (Faqat kelgan ma'lumotlarni)
+        if (dto.getDiseaseName() != null) entity.setDiseaseName(dto.getDiseaseName());
+        if (dto.getRecordDate() != null) entity.setRecordDate(dto.getRecordDate());
+        if (dto.getDoctorName() != null) entity.setDoctorName(dto.getDoctorName());
+        if (dto.getHospitalName() != null) entity.setHospitalName(dto.getHospitalName());
+        if (dto.getTreatment() != null) entity.setTreatment(dto.getTreatment());
+        if (dto.getNote() != null) entity.setNote(dto.getNote());
+        if (dto.getIsCritical() != null) entity.setIsCritical(dto.getIsCritical());
+        if (dto.getPhotoId() != null) entity.setPhotoId(dto.getPhotoId());
+
+        return healthRecordRepository.save(entity);
+    }
+
+    /**
+     * 4. O'chirish (Delete)
+     */
+    public AppResponse<String> delete(Long id) {
+        // 1. Joriy foydalanuvchi
+        Integer currentUserId = SpringSecurityUtil.getCurrentUserId();
+
+        // 2. Yozuvni topamiz
+        HealthRecordEntity entity = healthRecordRepository.findById(id)
+                .orElseThrow(() -> new AppBadException("Kasallik tarixi topilmadi"));
+
+        // 3. XAVFSIZLIK: Egasi ekanligini tekshirish
+        if (!entity.getPatient().getOwner().getId().equals(currentUserId)) {
+            throw new AppBadException("Sizda bu yozuvni o'chirish huquqi yo'q");
+        }
+
+        // 4. O'chiramiz
+        healthRecordRepository.delete(entity);
+        return new AppResponse<>("Kasallik tarixi muvoffaqiyatli o'chirildi.");
     }
 
     // Ro'yxatni olish
