@@ -8,27 +8,32 @@ import api.medpulse.uz.dto.auth.ResetPasswordConfirmDTO;
 import api.medpulse.uz.dto.auth.ResetPasswordDTO;
 import api.medpulse.uz.dto.sms.SmsResentDTO;
 import api.medpulse.uz.dto.sms.SmsVerificationDTO;
+import api.medpulse.uz.entity.PatientProfileEntity;
 import api.medpulse.uz.entity.ProfileEntity;
 import api.medpulse.uz.enums.AppLanguage;
 import api.medpulse.uz.enums.GeneralStatus;
 import api.medpulse.uz.enums.ProfileRole;
 import api.medpulse.uz.exps.AppBadException;
+import api.medpulse.uz.repository.PatientProfileRepository;
 import api.medpulse.uz.repository.ProfileRepository;
 import api.medpulse.uz.repository.ProfileRoleRepository;
 import api.medpulse.uz.util.EmailUtil;
 import api.medpulse.uz.util.JwtUtil;
 import api.medpulse.uz.util.PhoneUtil;
 import io.jsonwebtoken.JwtException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor // Repositorylarni injekt qilish uchun
 public class AuthService {
 
     @Autowired
@@ -54,15 +59,26 @@ public class AuthService {
     @Autowired
     private AttachService attachService;
 
+    // yangi qo'shilgan repo lar
+    @Autowired
+    private PatientProfileRepository patientProfileRepository;
+
+    @Transactional
     public AppResponse<String> registration(RegistrationDTO dto, AppLanguage lang){
 
         Optional<ProfileEntity> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
         if (optional.isPresent()){
             ProfileEntity profile = optional.get();
             if (profile.getStatus().equals(GeneralStatus.IN_REGISTRATION)){
+                // 1. Avval rollarni tozalaymiz
                 profileRoleService.deleteRoles(profile.getId());
+
                 // 1-usul
-                 profileRepository.delete(profile);
+                // 2. YANGI: Avvalgi urinishda yaratilgan Bemor Profilini ham o'chiramiz
+                // Aks holda Profile o'chmaydi (Foreign Key xatosi beradi)
+                patientProfileRepository.deleteByOwner_Id(profile.getId());
+                // 3. Keyin Profilni o'zini o'chiramiz
+                profileRepository.delete(profile);
                 // 2-usul
                 //send sms/email orqali ro'yxatdan o'tishini davom ettirish
             }else {
@@ -79,6 +95,16 @@ public class AuthService {
         entity.setVisible(true);
         entity.setCreatedDate(LocalDateTime.now());
         profileRepository.save(entity);
+        // --- YANGI QO'SHILADIGAN QISM (LOGIC START) ---
+        PatientProfileEntity patientProfile = new PatientProfileEntity();
+        patientProfile.setFullName(dto.getName()); // Ismni Profildan oladi
+        patientProfile.setGender(dto.getGender()); // DTO dan
+        patientProfile.setBirthDate(dto.getBirthDate()); // DTO dan
+        patientProfile.setOwner(entity); // Bog'liqlik: Egasi - shu yangi user
+
+        // Qolgan maydonlar (qon guruhi va h.k) hozircha null bo'lib turadi
+        patientProfileRepository.save(patientProfile);
+        // --- (LOGIC END) ---
         // Insert Role
         profileRoleService.create(entity.getId(), ProfileRole.ROLE_USER);
 
