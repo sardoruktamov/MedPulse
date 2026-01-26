@@ -1,0 +1,29 @@
+### 1. Kasallik tarixini qo'shish (To'liq)-Qizimni ID si
+POST http://localhost:8080/api/v1/health-record/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTQyMDUyMCwiZXhwIjoxNzY5NTA2OTIwfQ.Rk6TKPMnKItxB_EZYu1XBs03KZfKVbJlgPpXfGziq8ByC_y0ShELtXMNGasOLfnUrV2HB3DgTCkUlw_Rk3G_pQ
+
+{
+  "patientId": "5dc7b66b-1126-430c-89fa-8c0b5dbcf68a",
+  "diseaseName": "Ich buzilish",
+  "recordDate": "2026-01-22",
+  "doctorName": "Dr.Numonjonaka",
+  "hospitalName": null,
+  "treatment": "ikki marta klizma qilish, Erseflora 3 mahal, Seftab 2 mahal",
+  "note": "Kechasi isitmasi tushmadi, tez yordam chaqirmadik, ishtahasi yo'qoldi, Hoddok yeganligi sababi bo'lishi mumkin",
+  "isCritical": false
+}
+
+### 2. Tarixni ko'rish (Ro'yxat)
+GET http://localhost:8080/api/v1/health-record/list/5dc7b66b-1126-430c-89fa-8c0b5dbcf68a
+Authorization: Bearer <TOKEN>
+
+### Login
+POST localhost:8080/api/v1/auth/login
+Content-Type: application/json
+Accept-Language: UZ
+
+{
+  "username": "998911576777",
+  "password": "12345"
+}

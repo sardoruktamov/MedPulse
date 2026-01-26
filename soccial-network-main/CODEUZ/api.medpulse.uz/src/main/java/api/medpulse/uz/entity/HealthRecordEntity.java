@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,23 +12,35 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class HealthRecordEntity {
-    // (Kasallik tarixi)
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String diseaseName; // Kasallik nomi (Gepatit B, Qizamiq va h.k.)
-    private String icdCode; // Kelajakda API uchun lug'at kodi (yashirin)
+    // 1. Asosiy ma'lumotlar
+    @Column(nullable = false)
+    private String diseaseName; // Kasallik nomi (M: Gripp)
+
+    @Column(name = "record_date")
+    private LocalDate recordDate; // Qachon kasal bo'ldi? (Foydalanuvchi tanlaydi)
+
+    // 2. Doktor va Klinika (Qo'shimcha takliflar bilan)
+    private String doctorName; // Doktor Ismi (Qo'lda yoziladi)
+    private String hospitalName; // Klinika nomi (Qo'lda yoziladi)
 
     @Column(columnDefinition = "text")
-    private String note; // Bemorning shaxsiy eslatmasi yoki shifokor tavsiyasi
+    private String treatment; // Davolash (Dori-darmonlar ro'yxati)
 
-    private Boolean isCritical = false; // TRUE bo'lsa, QR-kod skanerlanganda birinchi bo'lib chiqadi
+    @Column(columnDefinition = "text")
+    private String note; // Qo'shimcha ixtiyoriy izoh
 
+    // 3. Tizim ma'lumotlari
+    private String photoId; // Analiz rasmi
+    private Boolean isCritical = false; // QR-kod uchun
+    private LocalDateTime createdDate = LocalDateTime.now(); // Tizimga yozilgan vaqt
+
+    // 4. Bog'liqlik
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")
-    private PatientProfileEntity patient; // Bu yozuv qaysi oila a'zosiga tegishli ekanligi
-
-    private LocalDateTime createdDate = LocalDateTime.now(); // Yozuv kiritilgan vaqt
+    private PatientProfileEntity patient;
 }
