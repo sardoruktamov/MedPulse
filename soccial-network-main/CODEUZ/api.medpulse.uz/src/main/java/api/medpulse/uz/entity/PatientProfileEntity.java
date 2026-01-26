@@ -1,6 +1,8 @@
 package api.medpulse.uz.entity;
 
+import api.medpulse.uz.enums.BloodGroup;
 import api.medpulse.uz.enums.Gender;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,12 +33,14 @@ public class PatientProfileEntity {
     private AttachEntity photo; // Rasm bilan bog'liqlik
 
     // QR-kod ma'lumotlari
-    private String bloodGroup;
+    @Enumerated(EnumType.STRING)
+    private BloodGroup bloodGroup;
     private Double weight;
     private Double height;
     private String workingBloodPressure;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
+    @JsonIgnore //Bu entityni JSON ga aylantirayotganda owner maydonini tashlab ket, ichiga kirma.
     private ProfileEntity owner; // Akkaunt egasi (Ota/Ona)
 }

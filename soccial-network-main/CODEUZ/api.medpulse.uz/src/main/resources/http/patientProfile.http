@@ -1,0 +1,43 @@
+### OTA PatientProfil malumotlarini olish
+GET http://localhost:8080/api/v1/patient/my-profiles
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTQyMDUyMCwiZXhwIjoxNzY5NTA2OTIwfQ.Rk6TKPMnKItxB_EZYu1XBs03KZfKVbJlgPpXfGziq8ByC_y0ShELtXMNGasOLfnUrV2HB3DgTCkUlw_Rk3G_pQ
+
+{
+}
+
+### Ota o'zi yoki oila azosining patientProfileEntty qismini tahrirlash
+PUT http://localhost:8080/api/v1/patient/5dc7b66b-1126-430c-89fa-8c0b5dbcf68a
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTQyMDUyMCwiZXhwIjoxNzY5NTA2OTIwfQ.Rk6TKPMnKItxB_EZYu1XBs03KZfKVbJlgPpXfGziq8ByC_y0ShELtXMNGasOLfnUrV2HB3DgTCkUlw_Rk3G_pQ
+
+{
+  "bloodGroup": "A_POSITIVE",
+  "weight": "69",
+  "height": "182",
+  "workingBloodPressure": "120/80"
+}
+
+### Oila a'zosini qo'shish (Farzand yoki boshqa)
+POST http://localhost:8080/api/v1/patient/family
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTQyMDUyMCwiZXhwIjoxNzY5NTA2OTIwfQ.Rk6TKPMnKItxB_EZYu1XBs03KZfKVbJlgPpXfGziq8ByC_y0ShELtXMNGasOLfnUrV2HB3DgTCkUlw_Rk3G_pQ
+
+{
+  "fullName": "Zoxidaxon Farxodjonova",
+  "birthDate": "2022-09-26",
+  "gender": "FEMALE",
+  "bloodGroup": "A_POSITIVE",
+  "weight": 12.5,
+  "height": 95.0
+}
+
+### Login
+POST localhost:8080/api/v1/auth/login
+Content-Type: application/json
+Accept-Language: UZ
+
+{
+  "username": "998911576777",
+  "password": "12345"
+}
