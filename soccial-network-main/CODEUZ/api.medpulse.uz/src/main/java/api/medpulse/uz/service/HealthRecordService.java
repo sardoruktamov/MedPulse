@@ -2,6 +2,7 @@ package api.medpulse.uz.service;
 
 import api.medpulse.uz.dto.AppResponse;
 import api.medpulse.uz.dto.HealthRecord.HealthRecordCreateDTO;
+import api.medpulse.uz.dto.HealthRecord.HealthRecordDTO;
 import api.medpulse.uz.dto.HealthRecord.HealthRecordUpdateDTO;
 import api.medpulse.uz.entity.HealthRecordEntity;
 import api.medpulse.uz.entity.PatientProfileEntity;
@@ -26,7 +27,10 @@ public class HealthRecordService {
     @Autowired
     private PatientProfileRepository patientProfileRepository;
 
-    public HealthRecordEntity create(HealthRecordCreateDTO dto) {
+    @Autowired
+    private AttachService attachService;
+
+    public HealthRecordDTO create(HealthRecordCreateDTO dto) {
         // 1. Kim yozyapti? (Ota)
         Integer currentUserId = SpringSecurityUtil.getCurrentUserId();
 
@@ -51,13 +55,14 @@ public class HealthRecordService {
 
         if (dto.getPhotoId() != null) entity.setPhotoId(dto.getPhotoId());
 
-        return healthRecordRepository.save(entity);
+        healthRecordRepository.save(entity);
+        return toDTO(entity);
     }
 
     /**
      * 3. Tahrirlash (Update)
      */
-    public HealthRecordEntity update(Long id, HealthRecordUpdateDTO dto) {
+    public HealthRecordDTO update(Long id, HealthRecordUpdateDTO dto) {
         // 1. Joriy foydalanuvchi (Ota)
         Integer currentUserId = SpringSecurityUtil.getCurrentUserId();
 
@@ -72,6 +77,19 @@ public class HealthRecordService {
         }
 
         // 4. O'zgartirish (Faqat kelgan ma'lumotlarni)
+        String deletePhotoId = null;
+
+        if (dto.getPhotoId() != null && !dto.getPhotoId().equals(entity.getPhotoId())) {
+            // 1. Eski rasmni o'chirishga tayyorlaymiz
+            deletePhotoId = entity.getPhotoId();
+
+            // 2. Yangi ID ni qo'yamiz
+            entity.setPhotoId(dto.getPhotoId());
+
+            // 3. Javobda "photo": null bo'lmasligi uchun obyektni ham yangilaymiz
+            entity.setPhoto(attachService.getEntity(dto.getPhotoId()));
+        }
+
         if (dto.getDiseaseName() != null) entity.setDiseaseName(dto.getDiseaseName());
         if (dto.getRecordDate() != null) entity.setRecordDate(dto.getRecordDate());
         if (dto.getDoctorName() != null) entity.setDoctorName(dto.getDoctorName());
@@ -79,9 +97,13 @@ public class HealthRecordService {
         if (dto.getTreatment() != null) entity.setTreatment(dto.getTreatment());
         if (dto.getNote() != null) entity.setNote(dto.getNote());
         if (dto.getIsCritical() != null) entity.setIsCritical(dto.getIsCritical());
-        if (dto.getPhotoId() != null) entity.setPhotoId(dto.getPhotoId());
 
-        return healthRecordRepository.save(entity);
+        healthRecordRepository.save(entity);
+        // Eski rasmni diskdan o'chirish
+        if (deletePhotoId != null) {
+            attachService.delete(deletePhotoId);
+        }
+        return toDTO(entity);
     }
 
     /**
@@ -106,12 +128,38 @@ public class HealthRecordService {
     }
 
     // Ro'yxatni olish
-    public List<HealthRecordEntity> getMedicalHistory(String patientId) {
+    public List<HealthRecordDTO> getMedicalHistory(String patientId) {
         Integer currentUserId = SpringSecurityUtil.getCurrentUserId();
         // Xavfsizlik: Faqat o'z oilasini ko'ra olsin
         boolean isOwner = patientProfileRepository.findByIdAndOwner_Id(patientId, currentUserId).isPresent();
         if (!isOwner) throw new AppBadException("Ruxsat yo'q");
 
-        return healthRecordRepository.findByPatientIdOrderByRecordDateDesc(patientId);
+        List<HealthRecordEntity> list = healthRecordRepository.findByPatientIdOrderByRecordDateDesc(patientId);
+
+        // Stream orqali hammasini DTO ga aylantiramiz
+        return list.stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    // 1. Convert Metodi (Entity -> DTO)
+    public HealthRecordDTO toDTO(HealthRecordEntity entity) {
+        HealthRecordDTO dto = new HealthRecordDTO();
+        dto.setId(entity.getId());
+        dto.setDiseaseName(entity.getDiseaseName());
+        dto.setRecordDate(entity.getRecordDate());
+        dto.setDoctorName(entity.getDoctorName());
+        dto.setHospitalName(entity.getHospitalName());
+        dto.setTreatment(entity.getTreatment());
+        dto.setNote(entity.getNote());
+        dto.setIsCritical(entity.getIsCritical());
+        dto.setCreatedDate(entity.getCreatedDate());
+
+        // Rasm konvertatsiyasi: Entity -> DTO (URL bilan)
+        if (entity.getPhoto() != null) {
+            dto.setPhoto(attachService.toDTO(entity.getPhoto()));
+        }
+
+        return dto;
     }
 }

@@ -36,7 +36,16 @@ public class HealthRecordEntity {
     private String note; // Qo'shimcha ixtiyoriy izoh
 
     // 3. Tizim ma'lumotlari
-    private String photoId; // Analiz rasmi
+    // 1. Bazaga yozish uchun (JSON da ko'rinmasin)
+    @Column(name = "photo_id")
+    @JsonIgnore
+    private String photoId;
+
+    // 2. O'qish uchun (Frontendga to'liq obyekt boradi)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "photo_id", insertable = false, updatable = false)
+    private AttachEntity photo;
+
     private Boolean isCritical = false; // QR-kod uchun
     private LocalDateTime createdDate = LocalDateTime.now(); // Tizimga yozilgan vaqt
 

@@ -110,7 +110,6 @@ public class PostService {
     }
 
     public List<PostDTO> getSimilarPostList(SimilarPostListDTO dto) {
-        log.info("ssssssssiiiimmmmmmmmm---", dto.getExceptId());
         List<PostEntity> postEntitiesList = postRepository.getSimilarPostList(dto.getExceptId());
 
         List<PostDTO> dtoList = postEntitiesList.stream()

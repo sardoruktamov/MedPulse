@@ -112,7 +112,7 @@ public class AttachService {
 //    public String openURL(String fileName) {
 //        return attachUrl + "/open/" + fileName;
 //    }
-    private AttachDTO toDTO(AttachEntity entity) {
+    public AttachDTO toDTO(AttachEntity entity) {
         AttachDTO attachDTO = new AttachDTO();
         attachDTO.setId(entity.getId());
         attachDTO.setOriginName(entity.getOrigenName());

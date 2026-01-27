@@ -1,9 +1,12 @@
 package api.medpulse.uz.service;
 
 import api.medpulse.uz.dto.patient.PatientCreateDTO;
+import api.medpulse.uz.dto.patient.PatientProfileDTO;
 import api.medpulse.uz.dto.patient.PatientUpdateDTO;
+import api.medpulse.uz.dto.post.PostDTO;
 import api.medpulse.uz.entity.AttachEntity;
 import api.medpulse.uz.entity.PatientProfileEntity;
+import api.medpulse.uz.entity.PostEntity;
 import api.medpulse.uz.entity.ProfileEntity;
 import api.medpulse.uz.exps.AppBadException;
 import api.medpulse.uz.repository.PatientProfileRepository;
@@ -29,7 +32,7 @@ public class PatientProfileService {
     private AttachService attachService;
 
     // Profilni yangilash
-    public PatientProfileEntity update(String profileId, PatientUpdateDTO dto) {
+    public PatientProfileDTO update(String profileId, PatientUpdateDTO dto) {
         // 1. Hozirgi kirgan foydalanuvchi (Ota) ID sini olamiz
         Integer currentUserId = SpringSecurityUtil.getCurrentUserId();
 
@@ -67,10 +70,10 @@ public class PatientProfileService {
             attachService.delete(deletePhotoId);
         }
 
-        return entity;
+        return toDTO(entity);
     }
 
-    public PatientProfileEntity create(PatientCreateDTO dto) {
+    public PatientProfileDTO create(PatientCreateDTO dto) {
         // 1. Joriy foydalanuvchi (Ota) ID sini olamiz
         Integer currentUserId = SpringSecurityUtil.getCurrentUserId();
 
@@ -92,13 +95,40 @@ public class PatientProfileService {
         if (dto.getHeight() != null) entity.setHeight(dto.getHeight());
 
         // 5. Saqlash
-        return patientProfileRepository.save(entity);
+        patientProfileRepository.save(entity);
+        return toDTO(entity);
     }
 
     // Foydalanuvchining barcha profillarini olish (O'ziniki va oilasiniki)
     // Bu metod frontendga qaysi ID ni update qilish kerakligini bilish uchun kerak
-    public List<PatientProfileEntity> getMyFamilyProfiles() {
+    // GET MY FAMILY
+    public List<PatientProfileDTO> getMyFamilyProfiles() {
         Integer currentUserId = SpringSecurityUtil.getCurrentUserId();
-        return patientProfileRepository.findByOwner_Id(currentUserId);
+        List<PatientProfileEntity> list = patientProfileRepository.findByOwner_Id(currentUserId);
+
+        // Stream orqali hamma entitylarni DTO ga o'giramiz
+        return list.stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    // 1. Convert Metodi (Yordamchi metod)
+    public PatientProfileDTO toDTO(PatientProfileEntity entity) {
+        PatientProfileDTO dto = new PatientProfileDTO();
+        dto.setId(entity.getId());
+        dto.setFullName(entity.getFullName());
+        dto.setBirthDate(entity.getBirthDate());
+        dto.setGender(entity.getGender());
+
+        // Rasm konvertatsiyasi: Entity -> DTO (URL bilan)
+        if (entity.getPhoto() != null) {
+            dto.setPhoto(attachService.toDTO(entity.getPhoto()));
+        }
+
+        dto.setBloodGroup(entity.getBloodGroup());
+        dto.setWeight(entity.getWeight());
+        dto.setHeight(entity.getHeight());
+        dto.setWorkingBloodPressure(entity.getWorkingBloodPressure());
+        return dto;
     }
 }

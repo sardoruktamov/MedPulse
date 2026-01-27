@@ -2,6 +2,7 @@ package api.medpulse.uz.controller;
 
 import api.medpulse.uz.dto.AppResponse;
 import api.medpulse.uz.dto.HealthRecord.HealthRecordCreateDTO;
+import api.medpulse.uz.dto.HealthRecord.HealthRecordDTO;
 import api.medpulse.uz.dto.HealthRecord.HealthRecordUpdateDTO;
 import api.medpulse.uz.entity.HealthRecordEntity;
 import api.medpulse.uz.service.HealthRecordService;
@@ -25,12 +26,12 @@ public class HealthRecordController {
     private HealthRecordService healthRecordService;
 
     @PostMapping("/create")
-    public ResponseEntity<HealthRecordEntity> create(@Valid @RequestBody HealthRecordCreateDTO dto) {
+    public ResponseEntity<HealthRecordDTO> create(@Valid @RequestBody HealthRecordCreateDTO dto) {
         return ResponseEntity.ok(healthRecordService.create(dto));
     }
 
     @GetMapping("/list/{patientId}")
-    public ResponseEntity<List<HealthRecordEntity>> getList(@PathVariable String patientId) {
+    public ResponseEntity<List<HealthRecordDTO>> getList(@PathVariable String patientId) {
         return ResponseEntity.ok(healthRecordService.getMedicalHistory(patientId));
     }
 
@@ -38,7 +39,7 @@ public class HealthRecordController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update record", description = "Kasallik tarixini tahrirlash")
-    public ResponseEntity<HealthRecordEntity> update(
+    public ResponseEntity<HealthRecordDTO> update(
             @PathVariable Long id,
             @RequestBody HealthRecordUpdateDTO dto) {
         return ResponseEntity.ok(healthRecordService.update(id, dto));
