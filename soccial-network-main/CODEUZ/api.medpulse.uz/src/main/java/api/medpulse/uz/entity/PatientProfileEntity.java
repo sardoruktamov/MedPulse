@@ -26,9 +26,10 @@ public class PatientProfileEntity {
 
     // Rasm uchun qism
     @Column(name = "photo_id")
+    @JsonIgnore
     private String photoId; // AttachEntity ID-si
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "photo_id", insertable = false, updatable = false)
     private AttachEntity photo; // Rasm bilan bog'liqlik
 

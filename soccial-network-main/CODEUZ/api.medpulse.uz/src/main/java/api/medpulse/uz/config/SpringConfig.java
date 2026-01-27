@@ -65,6 +65,8 @@ public class SpringConfig {
             authorizationManagerRequestMatcherRegistry
                     .requestMatchers(AUTH_WHITELIST).permitAll() //AUTH_WHITELIST ni o'rnida "/auth/**" bolishi mumkin edi
                     .requestMatchers(HttpMethod.GET,"/api/v1/posts/public/*").permitAll()
+                    .requestMatchers("/api/v1/patient/**").authenticated() // Login qilgan hamma kira olsin
+                    .requestMatchers("/api/v1/health-record/**").authenticated() // Kasallik tarixiga ham ruxsat
                     .anyRequest()
                     .authenticated();
         }).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

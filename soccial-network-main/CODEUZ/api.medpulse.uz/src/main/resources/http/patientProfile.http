@@ -1,7 +1,7 @@
 ### OTA PatientProfil malumotlarini olish
 GET http://localhost:8080/api/v1/patient/my-profiles
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTQyMDUyMCwiZXhwIjoxNzY5NTA2OTIwfQ.Rk6TKPMnKItxB_EZYu1XBs03KZfKVbJlgPpXfGziq8ByC_y0ShELtXMNGasOLfnUrV2HB3DgTCkUlw_Rk3G_pQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTUwODEwOSwiZXhwIjoxNzY5NTk0NTA5fQ.V2NKbnzPA0dWDThre9_vSMWpcHyvgROEaz2CUNyTiBh41Qgwg3BAxg4Eww_OECRuCWyGvcHGpoL1jRpWQNXvyQ
 
 {
 }
@@ -9,13 +9,10 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlc
 ### Ota o'zi yoki oila azosining patientProfileEntty qismini tahrirlash
 PUT http://localhost:8080/api/v1/patient/5dc7b66b-1126-430c-89fa-8c0b5dbcf68a
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTQyMDUyMCwiZXhwIjoxNzY5NTA2OTIwfQ.Rk6TKPMnKItxB_EZYu1XBs03KZfKVbJlgPpXfGziq8ByC_y0ShELtXMNGasOLfnUrV2HB3DgTCkUlw_Rk3G_pQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTUwODEwOSwiZXhwIjoxNzY5NTk0NTA5fQ.V2NKbnzPA0dWDThre9_vSMWpcHyvgROEaz2CUNyTiBh41Qgwg3BAxg4Eww_OECRuCWyGvcHGpoL1jRpWQNXvyQ
 
 {
-  "bloodGroup": "A_POSITIVE",
-  "weight": "69",
-  "height": "182",
-  "workingBloodPressure": "120/80"
+  "photoId": "2bb66663-724b-4eb1-8784-e7a7efc37836.jpg"
 }
 
 ### Oila a'zosini qo'shish (Farzand yoki boshqa)

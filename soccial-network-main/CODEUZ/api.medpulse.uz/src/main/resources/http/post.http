@@ -1,7 +1,7 @@
 ### Post create
 POST localhost:8080/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1a3RhbW92OTE5OEBtYWlsLnJ1Iiwicm9sZXMiOiJST0xFX1VTRVIsUk9MRV9BRE1JTixST0xFX1NVUEVSQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3NjkxNzEzMTQsImV4cCI6MTc2OTI1NzcxNH0.ch4Ig61uv3Nlb2hOYP-tI9THD7-1Z3X1OOCUfEIsUVDVBp6BuVrzviGXF5E5B9NASfh-m0CqBcFPygkegmRMgQ
+Authorization: Bearer <token>
 
 {
   "title": "2-user-93 6777 yaratgan POST",

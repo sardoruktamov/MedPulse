@@ -2,7 +2,7 @@
 PUT localhost:8080/profile/detail
 Content-Type: application/json
 Accept-Language: EN
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1a3RhbW92OTE5OEBtYWlsLnJ1Iiwicm9sZXMiOiJST0xFX1VTRVIiLCJpZCI6IjEyMCIsImlhdCI6MTczNjA2MTY2MywiZXhwIjoxNzM2MTQ4MDYzfQ.qbS1_1KSer81vkRMJPtIuz0wgNCGEMWcfqrAJe-f84D7y9j8FdFYtoQde4ptAmCsTkBPtGTHp2TxUYK4ty1m7Q
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTQyMDUyMCwiZXhwIjoxNzY5NTA2OTIwfQ.Rk6TKPMnKItxB_EZYu1XBs03KZfKVbJlgPpXfGziq8ByC_y0ShELtXMNGasOLfnUrV2HB3DgTCkUlw_Rk3G_pQ
 
 {
   "name": "O'ktamov S"
@@ -68,13 +68,13 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXJkb3JiZWsudWt0YW1vdi4xQ
 }
 
 ### Profile Photo update
-PUT localhost:8080/profile/photo
+PUT localhost:8080/api/v1/profile/photo
 Content-Type: application/json
 Accept-Language: UZ
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1a3RhbW92OTE5OEBtYWlsLnJ1Iiwicm9sZXMiOiJST0xFX1VTRVIiLCJpZCI6IjEyMCIsImlhdCI6MTczNzY0OTM5MSwiZXhwIjoxNzM3NzM1NzkxfQ.mnI__emOvWlKDm7TybpH6IIidjJIkiVlIFD5Qr_3RquVP9tl2SrfXkxw_4BV3DoTFuXAMa2d2bpuTfRO8FZ1Pw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTQyMDUyMCwiZXhwIjoxNzY5NTA2OTIwfQ.Rk6TKPMnKItxB_EZYu1XBs03KZfKVbJlgPpXfGziq8ByC_y0ShELtXMNGasOLfnUrV2HB3DgTCkUlw_Rk3G_pQ
 
 {
-  "photoId" : "54503aa7-b7b9-48a6-98ec-54a97f36a432.png"
+  "photoId" : "b8514c0b-3715-42dd-a5b3-5759882593b7.jpg"
 }
 
 ### Login

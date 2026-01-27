@@ -2,6 +2,7 @@ package api.medpulse.uz.service;
 
 import api.medpulse.uz.dto.patient.PatientCreateDTO;
 import api.medpulse.uz.dto.patient.PatientUpdateDTO;
+import api.medpulse.uz.entity.AttachEntity;
 import api.medpulse.uz.entity.PatientProfileEntity;
 import api.medpulse.uz.entity.ProfileEntity;
 import api.medpulse.uz.exps.AppBadException;
@@ -24,6 +25,8 @@ public class PatientProfileService {
 
     @Autowired
     private PatientProfileRepository patientProfileRepository;
+    @Autowired
+    private AttachService attachService;
 
     // Profilni yangilash
     public PatientProfileEntity update(String profileId, PatientUpdateDTO dto) {
@@ -34,20 +37,37 @@ public class PatientProfileService {
         PatientProfileEntity entity = patientProfileRepository.findByIdAndOwner_Id(profileId, currentUserId)
                 .orElseThrow(() -> new AppBadException("Profile not found or access denied/Profil topilmadi yoki kirish taqiqlandi"));
 
+        String deletePhotoId = null;
+
+        // Agar yangi rasm kelgan bo'lsa VA u eski rasmdan farq qilsa
+        if (dto.getPhotoId() != null && !dto.getPhotoId().equals(entity.getPhotoId())) {
+            // Eski rasmni ID sini eslab qolamiz
+            deletePhotoId = entity.getPhotoId();
+            // Yangi rasm ID sini o'rnatamiz
+            entity.setPhotoId(dto.getPhotoId());
+            AttachEntity newPhoto = attachService.getEntity(dto.getPhotoId());
+            entity.setPhoto(newPhoto);
+        }
+
         // 3. Ma'lumotlarni yangilaymiz (faqat null bo'lmaganlarini)
         if (dto.getFullName() != null) entity.setFullName(dto.getFullName());
         if (dto.getBirthDate() != null) entity.setBirthDate(dto.getBirthDate());
         if (dto.getGender() != null) entity.setGender(dto.getGender());
 
         // Tibbiy qism
-        if (dto.getPhotoId() != null) entity.setPhotoId(dto.getPhotoId());
         if (dto.getBloodGroup() != null) entity.setBloodGroup(dto.getBloodGroup()); // Enum bo'lsa .name() shart emas
         if (dto.getWeight() != null) entity.setWeight(dto.getWeight());
         if (dto.getHeight() != null) entity.setHeight(dto.getHeight());
         if (dto.getWorkingBloodPressure() != null) entity.setWorkingBloodPressure(dto.getWorkingBloodPressure());
 
         // 4. Saqlash
-        return patientProfileRepository.save(entity);
+        patientProfileRepository.save(entity);
+        // 2. Agar rasm o'zgargan bo'lsa, eski rasmni AttachService orqali o'chiramiz
+        if (deletePhotoId != null) {
+            attachService.delete(deletePhotoId);
+        }
+
+        return entity;
     }
 
     public PatientProfileEntity create(PatientCreateDTO dto) {
