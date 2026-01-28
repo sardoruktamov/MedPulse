@@ -39,6 +39,16 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlc
 DELETE http://localhost:8080/api/v1/health-record/4
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTQyMDUyMCwiZXhwIjoxNzY5NTA2OTIwfQ.Rk6TKPMnKItxB_EZYu1XBs03KZfKVbJlgPpXfGziq8ByC_y0ShELtXMNGasOLfnUrV2HB3DgTCkUlw_Rk3G_pQ
 
+### Global Search
+POST http://localhost:8080/api/v1/health-record/search
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTUwODEwOSwiZXhwIjoxNzY5NTk0NTA5fQ.V2NKbnzPA0dWDThre9_vSMWpcHyvgROEaz2CUNyTiBh41Qgwg3BAxg4Eww_OECRuCWyGvcHGpoL1jRpWQNXvyQ
+
+{
+  "text": "Grip",
+  "fromDate": "2025-01-01"
+}
+
 
 ### Login
 POST localhost:8080/api/v1/auth/login

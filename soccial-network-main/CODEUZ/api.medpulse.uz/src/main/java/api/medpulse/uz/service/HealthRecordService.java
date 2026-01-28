@@ -1,9 +1,7 @@
 package api.medpulse.uz.service;
 
 import api.medpulse.uz.dto.AppResponse;
-import api.medpulse.uz.dto.HealthRecord.HealthRecordCreateDTO;
-import api.medpulse.uz.dto.HealthRecord.HealthRecordDTO;
-import api.medpulse.uz.dto.HealthRecord.HealthRecordUpdateDTO;
+import api.medpulse.uz.dto.HealthRecord.*;
 import api.medpulse.uz.entity.HealthRecordEntity;
 import api.medpulse.uz.entity.PatientProfileEntity;
 import api.medpulse.uz.exps.AppBadException;
@@ -13,14 +11,19 @@ import api.medpulse.uz.util.SpringSecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class HealthRecordService {
+
+    @Value("${attach.upload.url}")
+    private String attachUrl;
 
     @Autowired
     private HealthRecordRepository healthRecordRepository;
@@ -125,6 +128,42 @@ public class HealthRecordService {
         // 4. O'chiramiz
         healthRecordRepository.delete(entity);
         return new AppResponse<>("Kasallik tarixi muvoffaqiyatli o'chirildi.");
+    }
+
+    public List<HealthRecordSearchDTO> filter(HealthFilterDTO filter) {
+        Integer currentUserId = SpringSecurityUtil.getCurrentUserId();
+
+        // 1. Sana logikasi
+        LocalDate fromDate = filter.getFromDate();
+        LocalDate toDate = filter.getToDate();
+        if (fromDate != null && toDate == null) {
+            toDate = LocalDate.now(); // Agar tugash sanasi bo'lmasa, bugun deb olamiz
+        }
+
+        // 2. Matn logikasi (bo'sh joylarni tozalash)
+        String searchText = filter.getText();
+        if (searchText != null && searchText.trim().isEmpty()) {
+            searchText = null;
+        } else if (searchText != null) {
+            // DIQQAT: .toLowerCase() ni shu yerda qilamiz!
+            // Endi "Grip" -> "%grip%" bo'ladi
+            searchText = "%" + searchText.trim().toLowerCase() + "%";
+        }
+
+        // 3. Bazadan ma'lumot olish
+        List<HealthRecordSearchDTO> resultList = healthRecordRepository.filter(currentUserId, searchText, fromDate, toDate);
+
+        // 4. URL YASASH (Post-processing)
+        // Har bir natijani aylanib chiqib, ID o'rniga to'liq URL qo'yamiz
+        resultList.forEach(dto -> {
+            if (dto.getPatientPhotoUrl() != null) {
+                // Masalan: "http://localhost:8080/api/v1/attach" + "/open/" + "uuid.jpg"
+                String fullUrl = attachUrl + "/open/" + dto.getPatientPhotoUrl();
+                dto.setPatientPhotoUrl(fullUrl);
+            }
+        });
+
+        return resultList;
     }
 
     // Ro'yxatni olish

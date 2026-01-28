@@ -1,9 +1,7 @@
 package api.medpulse.uz.controller;
 
 import api.medpulse.uz.dto.AppResponse;
-import api.medpulse.uz.dto.HealthRecord.HealthRecordCreateDTO;
-import api.medpulse.uz.dto.HealthRecord.HealthRecordDTO;
-import api.medpulse.uz.dto.HealthRecord.HealthRecordUpdateDTO;
+import api.medpulse.uz.dto.HealthRecord.*;
 import api.medpulse.uz.entity.HealthRecordEntity;
 import api.medpulse.uz.service.HealthRecordService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,5 +47,13 @@ public class HealthRecordController {
     @Operation(summary = "Delete record", description = "Kasallik tarixini o'chirish")
     public ResponseEntity<AppResponse<String>> delete(@PathVariable Long id) {
         return ResponseEntity.ok(healthRecordService.delete(id));
+    }
+
+    /**
+     * Global Search qismi: qdiruvga ikkita sana, Dori, Kasallik, Doktor nomi orqali bir vaqtda qidirish mumkin
+     */
+    @PostMapping("/search")
+    public ResponseEntity<List<HealthRecordSearchDTO>> search(@RequestBody HealthFilterDTO filterDTO) {
+        return ResponseEntity.ok(healthRecordService.filter(filterDTO));
     }
 }
