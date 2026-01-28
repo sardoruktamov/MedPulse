@@ -4,11 +4,11 @@ Content-Type: application/json
 Accept-Language: UZ
 
 {
-  "name": "O'ktamov Sardorbek",
-  "username": "998911576777",
+  "name": "Burxonov Baxodir",
+  "username": "998972710631",
   "password": "12345",
   "gender": "MALE",
-  "birthDate": "1991-12-24"
+  "birthDate": "1990-06-10"
 }
 
 ### Registration verification
@@ -20,8 +20,8 @@ Content-Type: application/json
 Accept-Language: UZ
 
 {
-  "phoneNumber": "998911576777",
-  "code": "79940"
+  "phoneNumber": "998972710631",
+  "code": "65007"
 }
 
 ### Registration sms verification RESENT

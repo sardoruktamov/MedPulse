@@ -1,0 +1,93 @@
+### O'zgaruvchilar (O'zingizning Tokenlaringizni qo'ying)
+@userToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5NzI3MTA2MzEiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMiIsImlhdCI6MTc2OTYxODYzMiwiZXhwIjoxNzY5NzA1MDMyfQ.BKEw-oxyv8-T0OB8oZb62XHEhIOQRHbd2YFJV3S5DkG5IqavfUdQlARlZ2Asitc-K_jJL9264Z9EyI5GwfR9qA
+@adminToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3Njk2MTg2OTEsImV4cCI6MTc2OTcwNTA5MX0.Y3dbTEJnFy-5AQ8erYa-Lt9o1VKR8tOBHfagw7xVsnOzJexU3aMNb02QHZqaCExucc27ENh_jbupKjIW9xdv1A
+
+###
+# ---------------------------------------------------------
+# 1-QADAM: DIPLOM YUKLASH (Attach Moduli orqali)
+# Qaytib kelgan "id" ni nusxalab oling va pastdagi "diplomaId" ga qo'ying.
+# ---------------------------------------------------------
+POST http://localhost:8080/api/v1/attach/upload
+Content-Type: multipart/form-data; boundary=boundary
+Authorization: Bearer {{userToken}}
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="DXM.jpg"
+Content-Type: image/jpeg
+
+< E:\HUJJATLAR\\DXM.jpg
+--boundary--
+
+###
+
+# ---------------------------------------------------------
+# 2-QADAM: ARIZA TOPSHIRISH (User)
+# "diplomaId" ga yuqoridagi response dagi ID ni qo'ying.
+# Degree turlari: STUDENT, BACHELOR, MASTER, PHD, RESIDENCY
+# ---------------------------------------------------------
+POST http://localhost:8080/api/v1/doctor-apply
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5NzI3MTA2MzEiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMiIsImlhdCI6MTc2OTYxODYzMiwiZXhwIjoxNzY5NzA1MDMyfQ.BKEw-oxyv8-T0OB8oZb62XHEhIOQRHbd2YFJV3S5DkG5IqavfUdQlARlZ2Asitc-K_jJL9264Z9EyI5GwfR9qA
+
+{
+  "speciality": "Kardiolog",
+  "universityName": "Toshkent Tibbiyot Akademiyasi",
+  "degree": "BACHELOR",
+  "graduatedDate": "2018-06-25",
+  "experienceYear": 5,
+  "currentWorkplace": "Akfa Medline",
+  "diplomId": "6d50fb67-b58b-4401-8c03-1b90680b4648.jpg",
+  "agreementPolicy": true
+}
+
+###
+
+# ---------------------------------------------------------
+# 3-QADAM: ARIZANI TASDIQLASH (Admin)
+# User -> Doctor roliga o'tadi.
+# URL dagi "1" bu doctor_details jadvalidagi ID (ariza ID si).
+# ---------------------------------------------------------
+PUT http://localhost:8080/api/v1/doctor-apply/change-status/1?status=APPROVED
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3Njk2MTg2OTEsImV4cCI6MTc2OTcwNTA5MX0.Y3dbTEJnFy-5AQ8erYa-Lt9o1VKR8tOBHfagw7xVsnOzJexU3aMNb02QHZqaCExucc27ENh_jbupKjIW9xdv1A
+
+###
+
+# ---------------------------------------------------------
+# 3.1-QADAM: ARIZANI RAD ETISH (Admin)
+# Rad etishda "reason" yozish majburiy.
+# ---------------------------------------------------------
+PUT http://localhost:8080/api/v1/doctor-apply/change-status/1?status=REJECTED&reason=Diplom+xira+tushgan+qayta+yuklang
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+###
+
+# ---------------------------------------------------------
+# 4-QADAM: ADMIN KO'RISHI (Full Data)
+# Bunda Diplom URL va Rad etish sabablari ko'rinadi.
+# ---------------------------------------------------------
+GET http://localhost:8080/api/v1/doctor-apply/admin/1
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+###
+
+# ---------------------------------------------------------
+# 5-QADAM: PUBLIC KO'RISH (Bemorlar uchun)
+# Bunda faqat tasdiqlangan (APPROVED) doktor ko'rinadi.
+# Diplom va sabablar ko'rinmaydi.
+# ---------------------------------------------------------
+GET http://localhost:8080/api/v1/doctor-apply/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3Njk2MTg2OTEsImV4cCI6MTc2OTcwNTA5MX0.Y3dbTEJnFy-5AQ8erYa-Lt9o1VKR8tOBHfagw7xVsnOzJexU3aMNb02QHZqaCExucc27ENh_jbupKjIW9xdv1A
+
+### Login
+POST localhost:8080/api/v1/auth/login
+Content-Type: application/json
+Accept-Language: UZ
+
+{
+  "username": "998911576777",
+  "password": "12345"
+}
