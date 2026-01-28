@@ -110,6 +110,27 @@ public class HealthRecordService {
     }
 
     /**
+     * GET ONE (Batafsil ko'rish)
+     */
+    public HealthRecordDTO get(Long id) {
+        // 1. Joriy foydalanuvchi
+        Integer currentUserId = SpringSecurityUtil.getCurrentUserId();
+
+        // 2. Yozuvni topish
+        HealthRecordEntity entity = healthRecordRepository.findById(id)
+                .orElseThrow(() -> new AppBadException("Ma'lumot topilmadi"));
+
+        // 3. XAVFSIZLIK: Bu yozuv rostdan ham shu odamning oilasiga tegishlimi?
+        // Agar begona bo'lsa, xato beramiz!
+        if (!entity.getPatient().getOwner().getId().equals(currentUserId)) {
+            throw new AppBadException("Bu ma'lumotni ko'rishga ruxsatingiz yo'q");
+        }
+
+        // 4. DTO ga o'girib qaytarish (Bunda hamma fieldlar bo'ladi)
+        return toDTO(entity);
+    }
+
+    /**
      * 4. O'chirish (Delete)
      */
     public AppResponse<String> delete(Long id) {

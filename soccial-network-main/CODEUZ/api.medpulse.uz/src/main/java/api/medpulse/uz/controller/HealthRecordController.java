@@ -53,7 +53,14 @@ public class HealthRecordController {
      * Global Search qismi: qdiruvga ikkita sana, Dori, Kasallik, Doktor nomi orqali bir vaqtda qidirish mumkin
      */
     @PostMapping("/search")
+    @Operation(summary = "Global Search", description = "text qismiga istalgan malumot yozib barcha maydonlarni qidirish mumkin. Responsda qaytgan ID-kasallik tarixining ID si hissobanadi")
     public ResponseEntity<List<HealthRecordSearchDTO>> search(@RequestBody HealthFilterDTO filterDTO) {
         return ResponseEntity.ok(healthRecordService.filter(filterDTO));
+    }
+
+    @GetMapping("/{id}") // kasallik tarixining ID si
+    @Operation(summary = "Get One", description = "Bitta kasallik tarixi haqida to'liq ma'lumot olish")
+    public ResponseEntity<HealthRecordDTO> getDetail(@PathVariable Long id) {
+        return ResponseEntity.ok(healthRecordService.get(id));
     }
 }
