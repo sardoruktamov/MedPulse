@@ -90,22 +90,43 @@ public class HealthRecordService {
             throw new AppBadException("Sizda bu yozuvni tahrirlash huquqi yo'q");
         }
 
-        // 4. O'zgartirish (Faqat kelgan ma'lumotlarni)
-        String deletePhotoId = null;
 
-        // Agar dto.getPhotoIds() null bo'lsa, rasmlarga tegmaymiz.
+        // --- ESKI RASMLARNI TOZALASH 🔥 ---
         // Agar bo'sh ro'yxat [] kelsa, rasmlarni o'chiramiz.
         // Agar to'la ro'yxat kelsa, yangisiga almashtiramiz.
-        if (dto.getPhotoIds() != null) {
-            List<AttachEntity> newPhotoList = new ArrayList<>();
-            for (String photoId : dto.getPhotoIds()) {
-                newPhotoList.add(attachService.getEntity(photoId));
-            }
-            // Eski ro'yxatni yangisiga almashtiramiz
-            entity.setPhotos(newPhotoList);
 
-            // Izoh: Eski rasmlarni diskdan o'chirish logikasi murakkablashadi (Multiple bo'lgani uchun).
-            // Hozircha faqat bazadagi bog'liqlikni uzish yetarli.
+        // Agar dto.getPhotoIds() null kelsa, demak rasmlarga tegilmasin degani -> hech nima qilmaymiz.
+        if (dto.getPhotoIds() != null) {
+
+            // 1. O'chirilishi kerak bo'lgan rasmlarni aniqlab olamiz
+            // (Eskida bor, lekin Yangida yo'q bo'lgan rasmlar)
+            List<String> oldPhotoIds = new ArrayList<>();
+            if (entity.getPhotos() != null) {
+                oldPhotoIds = entity.getPhotos().stream().map(AttachEntity::getId).toList();
+            }
+
+            List<String> newPhotoIds = dto.getPhotoIds(); // Frontenddan kelgan
+
+            // 2. Yangi rasmlarni Entityga o'rnatamiz
+            List<AttachEntity> newEntityList = new ArrayList<>();
+            for (String photoId : newPhotoIds) {
+                newEntityList.add(attachService.getEntity(photoId));
+            }
+            entity.setPhotos(newEntityList);
+
+            // 3. Keraksiz rasmlarni Diskdan o'chiramiz
+            for (String oldId : oldPhotoIds) {
+                // Agar eski ID yangi ro'yxatda bo'lmasa -> O'CHIRAMIZ
+                if (!newPhotoIds.contains(oldId)) {
+                    try {
+                        attachService.delete(oldId); // Diskdan va Attach jadvalidan o'chadi
+                    } catch (Exception e) {
+                        // Agar rasm o'chmay qolsa, dastur to'xtab qolmasligi kerak
+                        // Shunchaki logga yozib qo'yamiz
+                        log.warn("Rasmni o'chirishda xatolik: {}", oldId);
+                    }
+                }
+            }
         }
 
         if (dto.getDiseaseName() != null) entity.setDiseaseName(dto.getDiseaseName());
@@ -117,10 +138,7 @@ public class HealthRecordService {
         if (dto.getIsCritical() != null) entity.setIsCritical(dto.getIsCritical());
 
         healthRecordRepository.save(entity);
-        // Eski rasmni diskdan o'chirish
-        if (deletePhotoId != null) {
-            attachService.delete(deletePhotoId);
-        }
+
         return toDTO(entity);
     }
 

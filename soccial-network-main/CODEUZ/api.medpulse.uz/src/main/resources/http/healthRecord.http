@@ -4,9 +4,9 @@ Content-Type: multipart/form-data; boundary=WebAppBoundary
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3Njk2MTg2OTEsImV4cCI6MTc2OTcwNTA5MX0.Y3dbTEJnFy-5AQ8erYa-Lt9o1VKR8tOBHfagw7xVsnOzJexU3aMNb02QHZqaCExucc27ENh_jbupKjIW9xdv1A
 
 --WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="444.png"
+Content-Disposition: form-data; name="file"; filename="ican.jpg"
 
-< E:\PHOTOS\444.png
+< E:\PHOTOS\ican.jpg
 
 
 ### 1. Kasallik tarixini qo'shish (To'liq)-Qizimni ID si
@@ -52,7 +52,7 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlc
   "treatment": "L-montus 1/2 ikki maxal",
   "note": "Yo'tal, istima",
   "photoIds": [
-    "0d28482a-936c-48c4-9a45-9a6e051945e5.png"
+    "f5c76251-6626-4bf5-845f-d73b29945d9d.png"
   ],
   "isCritical": false
 }
