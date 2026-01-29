@@ -1,7 +1,9 @@
 package api.medpulse.uz.service;
 
 import api.medpulse.uz.dto.AppResponse;
+import api.medpulse.uz.dto.AttachDTO;
 import api.medpulse.uz.dto.HealthRecord.*;
+import api.medpulse.uz.entity.AttachEntity;
 import api.medpulse.uz.entity.HealthRecordEntity;
 import api.medpulse.uz.entity.PatientProfileEntity;
 import api.medpulse.uz.exps.AppBadException;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -56,7 +59,15 @@ public class HealthRecordService {
 
         entity.setIsCritical(dto.getIsCritical());
 
-        if (dto.getPhotoId() != null) entity.setPhotoId(dto.getPhotoId());
+        if (dto.getPhotoIds() != null && !dto.getPhotoIds().isEmpty()) {
+            List<AttachEntity> attachList = new ArrayList<>();
+            for (String photoId : dto.getPhotoIds()) {
+                // Har bir ID bo'yicha Entityni olamiz
+                // (AttachService da getEntity(String id) metodi bo'lishi kerak)
+                attachList.add(attachService.getEntity(photoId));
+            }
+            entity.setPhotos(attachList);
+        }
 
         healthRecordRepository.save(entity);
         return toDTO(entity);
@@ -82,15 +93,19 @@ public class HealthRecordService {
         // 4. O'zgartirish (Faqat kelgan ma'lumotlarni)
         String deletePhotoId = null;
 
-        if (dto.getPhotoId() != null && !dto.getPhotoId().equals(entity.getPhotoId())) {
-            // 1. Eski rasmni o'chirishga tayyorlaymiz
-            deletePhotoId = entity.getPhotoId();
+        // Agar dto.getPhotoIds() null bo'lsa, rasmlarga tegmaymiz.
+        // Agar bo'sh ro'yxat [] kelsa, rasmlarni o'chiramiz.
+        // Agar to'la ro'yxat kelsa, yangisiga almashtiramiz.
+        if (dto.getPhotoIds() != null) {
+            List<AttachEntity> newPhotoList = new ArrayList<>();
+            for (String photoId : dto.getPhotoIds()) {
+                newPhotoList.add(attachService.getEntity(photoId));
+            }
+            // Eski ro'yxatni yangisiga almashtiramiz
+            entity.setPhotos(newPhotoList);
 
-            // 2. Yangi ID ni qo'yamiz
-            entity.setPhotoId(dto.getPhotoId());
-
-            // 3. Javobda "photo": null bo'lmasligi uchun obyektni ham yangilaymiz
-            entity.setPhoto(attachService.getEntity(dto.getPhotoId()));
+            // Izoh: Eski rasmlarni diskdan o'chirish logikasi murakkablashadi (Multiple bo'lgani uchun).
+            // Hozircha faqat bazadagi bog'liqlikni uzish yetarli.
         }
 
         if (dto.getDiseaseName() != null) entity.setDiseaseName(dto.getDiseaseName());
@@ -216,8 +231,12 @@ public class HealthRecordService {
         dto.setCreatedDate(entity.getCreatedDate());
 
         // Rasm konvertatsiyasi: Entity -> DTO (URL bilan)
-        if (entity.getPhoto() != null) {
-            dto.setPhoto(attachService.toDTO(entity.getPhoto()));
+        if (entity.getPhotos() != null && !entity.getPhotos().isEmpty()) {
+            List<AttachDTO> photoDTOs = new ArrayList<>();
+            for (AttachEntity photoEntity : entity.getPhotos()) {
+                photoDTOs.add(attachService.toDTO(photoEntity));
+            }
+            dto.setPhotos(photoDTOs);
         }
 
         return dto;

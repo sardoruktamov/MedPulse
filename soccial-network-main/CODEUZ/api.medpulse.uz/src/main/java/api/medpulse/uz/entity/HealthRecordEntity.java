@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "health_record")
@@ -35,16 +36,17 @@ public class HealthRecordEntity {
     @Column(columnDefinition = "text")
     private String note; // Qo'shimcha ixtiyoriy izoh
 
-    // 3. Tizim ma'lumotlari
-    // 1. Bazaga yozish uchun (JSON da ko'rinmasin)
-    @Column(name = "photo_id")
-    @JsonIgnore
-    private String photoId;
+    // --- 3. RASMLAR (MULTIPLE UPLOAD) ---
+    // Oldingi "photoId" va "photo" o'rniga:
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "health_record_photos", // Oraliq jadval nomi
+            joinColumns = @JoinColumn(name = "health_record_id"), // Record ID
+            inverseJoinColumns = @JoinColumn(name = "photo_id")   // Rasm ID
+    )
+    private List<AttachEntity> photos;
+    // ------------------------------------
 
-    // 2. O'qish uchun (Frontendga to'liq obyekt boradi)
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "photo_id", insertable = false, updatable = false)
-    private AttachEntity photo;
 
     private Boolean isCritical = false; // QR-kod uchun
     private LocalDateTime createdDate = LocalDateTime.now(); // Tizimga yozilgan vaqt
@@ -55,3 +57,15 @@ public class HealthRecordEntity {
     @JsonIgnore
     private PatientProfileEntity patient;
 }
+
+
+//    // 3. Tizim ma'lumotlari
+//    // 1. Bazaga yozish uchun (JSON da ko'rinmasin)
+//    @Column(name = "photo_id")
+//    @JsonIgnore
+//    private String photoId;
+//
+//    // 2. O'qish uchun (Frontendga to'liq obyekt boradi)
+//    @OneToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "photo_id", insertable = false, updatable = false)
+//    private AttachEntity photo;

@@ -21,6 +21,7 @@ public class DoctorFullDTO {
     private String currentWorkplace;
 
     private AttachDTO diplom; // Diplom rasmi (URL bilan)
+    private AttachDTO avatar;  // doctor profilidagi rasmi uchun
 
     private ApplicationStatus status;
     private String rejectionReason; // Admin uchun muhim

@@ -151,7 +151,10 @@ public class DoctorDetailsService {
         dto.setId(entity.getId());
         dto.setProfileId(entity.getProfile().getId());
         dto.setFullName(entity.getProfile().getName()); // Ism Profile dan olinadi
-
+        //  Admin uchun Avatar 🔥
+        if (entity.getProfile().getPhotoId() != null) {
+            dto.setAvatar(attachService.attachDTO(entity.getProfile().getPhotoId()));
+        }
         dto.setSpeciality(entity.getSpeciality());
         dto.setUniversityName(entity.getUniversityName());
         dto.setDegree(entity.getDegree());

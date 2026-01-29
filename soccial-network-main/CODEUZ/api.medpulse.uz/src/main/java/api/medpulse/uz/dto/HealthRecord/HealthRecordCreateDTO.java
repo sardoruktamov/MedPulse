@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,6 +26,6 @@ public class HealthRecordCreateDTO {
     private String treatment; // "Paracetamol, Ko'p suyuqlik ichish..."
     private String note; // "Isitmasi 39 ga chiqdi" yoki bemorning holati, kasallik asoratlari
 
-    private String photoId;
+    private List<String> photoIds; // Endi ID lar ro'yxati keladi
     private Boolean isCritical = false; // QR kode uchun
 }
