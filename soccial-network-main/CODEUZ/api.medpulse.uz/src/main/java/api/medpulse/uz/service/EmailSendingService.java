@@ -1,9 +1,11 @@
 package api.medpulse.uz.service;
+import api.medpulse.uz.config.CustomUserDetails;
 import api.medpulse.uz.enums.AppLanguage;
 import api.medpulse.uz.enums.SmsType;
 import api.medpulse.uz.exps.AppBadException;
 import api.medpulse.uz.util.JwtUtil;
 import api.medpulse.uz.util.RandomUtil;
+import api.medpulse.uz.util.SpringSecurityUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -63,11 +65,15 @@ public class EmailSendingService {
                 "<h1>Ro'yxatdan o'tish</h1>\n" +
                 "<p>Ro'yxatdan o'tishni yakunlash uchun tugmani bosing:\n" +
                 "    <a  class=\"tugma\"\n style=`hover:  color: white;background-color: darkgray;`" +
-                "            href=\"%s/auth/registration/email-verification/%s?lang=%s\" target=\"_blank\">tasdiqlash</a></p>\n" +
+                "            href=\"%s/api/v1/auth/registration/email-verification/%s?lang=%s\" target=\"_blank\">tasdiqlash</a></p>\n" +
                 "</body>\n" +
                 "</html>";
 
         body = String.format(body,serverDomain, JwtUtil.encode(profileId), lang.name());
+        // sms_historyga saqlash uchun
+        CustomUserDetails currentProfile = SpringSecurityUtil.getCurrentProfile();
+        emailHistoryService.created(email, currentProfile.getName(), SmsType.REGISTRATION);
+
         sendMimeEmail(email,subject,body);
     }
 
