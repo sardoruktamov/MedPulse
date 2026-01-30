@@ -6,6 +6,7 @@ import api.medpulse.uz.enums.DoctorDegree;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,7 +21,8 @@ public class DoctorFullDTO {
     private DoctorDegree degree;
     private String currentWorkplace;
 
-    private AttachDTO diplom; // Diplom rasmi (URL bilan)
+    private List<AttachDTO> diplomList; // Diplom rasmi (URL bilan)
+    private List<AttachDTO> certificateList;
     private AttachDTO avatar;  // doctor profilidagi rasmi uchun
 
     private ApplicationStatus status;

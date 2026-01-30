@@ -7,12 +7,12 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlc
 }
 
 ### Ota o'zi yoki oila azosining patientProfileEntty qismini tahrirlash
-PUT http://localhost:8080/api/v1/patient/5dc7b66b-1126-430c-89fa-8c0b5dbcf68a
+PUT http://localhost:8080/api/v1/patient/9c4f270f-33e5-4636-9e28-ed0b428c9da1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTUwODEwOSwiZXhwIjoxNzY5NTk0NTA5fQ.V2NKbnzPA0dWDThre9_vSMWpcHyvgROEaz2CUNyTiBh41Qgwg3BAxg4Eww_OECRuCWyGvcHGpoL1jRpWQNXvyQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXJkb3JiZWsudWt0YW1vdi4xQG1haWwucnUiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMTYiLCJpYXQiOjE3Njk3NjY1MTEsImV4cCI6MTc2OTg1MjkxMX0.et-h0nzKeeJ9WEXuQvbUqXQ26iZnLlQehF8m_oBV2euDlIi_8WVWvQmm-YuCfEySg8wqXDrgO4Dge7H4TKcTqw
 
 {
-  "photoId": "2bb66663-724b-4eb1-8784-e7a7efc37836.jpg"
+  "photoId": "b6dc146c-0cd2-4b07-b8e5-4adfc4b7480f.jpg"
 }
 
 ### Oila a'zosini qo'shish (Farzand yoki boshqa)

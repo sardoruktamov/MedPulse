@@ -5,6 +5,8 @@ import api.medpulse.uz.enums.DoctorDegree;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class DoctorPublicDTO {
@@ -20,4 +22,6 @@ public class DoctorPublicDTO {
     private DoctorDegree degree;
     private String currentWorkplace;
     private Integer experienceYear;
+    //  Sertifikatlar barchaga ko'rinadi
+    private List<AttachDTO> certificateList;
 }

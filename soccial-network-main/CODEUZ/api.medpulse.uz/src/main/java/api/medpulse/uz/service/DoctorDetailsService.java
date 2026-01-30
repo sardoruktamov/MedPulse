@@ -1,8 +1,10 @@
 package api.medpulse.uz.service;
 
+import api.medpulse.uz.dto.AttachDTO;
 import api.medpulse.uz.dto.doctor.DoctorApplyDTO;
 import api.medpulse.uz.dto.doctor.DoctorFullDTO; // Buni o'zingiz yaratasiz (fieldlarni Mapping qilish uchun)
 import api.medpulse.uz.dto.doctor.DoctorPublicDTO;
+import api.medpulse.uz.entity.AttachEntity;
 import api.medpulse.uz.entity.DoctorDetailsEntity;
 import api.medpulse.uz.entity.ProfileEntity;
 import api.medpulse.uz.entity.ProfileRoleEntity;
@@ -15,15 +17,18 @@ import api.medpulse.uz.repository.ProfileRoleRepository;
 import api.medpulse.uz.service.AttachService;
 import api.medpulse.uz.util.SpringSecurityUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DoctorDetailsService {
 
     @Autowired
@@ -54,19 +59,20 @@ public class DoctorDetailsService {
         if (optional.isPresent()) {
             // --- ESKI ARIZANI TAHRIRLASH ---
             entity = optional.get();
-
-            // Agar allaqachon APPROVED bo'lsa, qayta topshirolmaydi
             if (entity.getStatus().equals(ApplicationStatus.APPROVED)) {
                 throw new AppBadException("Siz allaqachon Doctorsiz!");
             }
-            // Agar PENDING bo'lsa ham kutishi kerak (yoki tahrirlashga ruxsat berish mumkin)
-
-            // Statusni qayta PENDING qilamiz (Admin qayta ko'rishi uchun)
             entity.setStatus(ApplicationStatus.PENDING);
             entity.setUpdatedDate(LocalDateTime.now());
 
+            // 🔥 1. DIPLOMLARNI YANGILASH VA TOZALASH 🔥
+            updatePhotoList(entity.getDiplomList(), dto.getDiplomPhotoIds(), true); // true = Diplom (Entityga set qilish uchun pastda alohida ishlaymiz)
+
+            // 🔥 2. SERTIFIKATLARNI YANGILASH VA TOZALASH 🔥
+            updatePhotoList(entity.getCertificateList(), dto.getCertificatePhotoIds(), false);
+
         } else {
-            // --- YANGI ARIZA ---
+            // --- CREATE (YANGI) ---
             entity = new DoctorDetailsEntity();
             entity.setProfile(profile);
             entity.setCreatedDate(LocalDateTime.now());
@@ -81,20 +87,62 @@ public class DoctorDetailsService {
         entity.setCurrentWorkplace(dto.getCurrentWorkplace());
         entity.setAgreementPolicy(dto.getAgreementPolicy());
 
-        // Diplom rasmi
-        entity.setDiplomId(dto.getDiplomId());
-        // Eslatma: RejectionReason ni o'chirmaymiz (Tarix uchun qoladi)
+        // DTO dagi ID larni -> Entity larga aylantirib, Asosiy Entityga berish kerak
+        entity.setDiplomList(getAttachListFromIds(dto.getDiplomPhotoIds()));
+        entity.setCertificateList(getAttachListFromIds(dto.getCertificatePhotoIds()));
 
         doctorDetailsRepository.save(entity);
         return "Ariza yuborildi. Tez orada ko'rib chiqiladi.";
     }
 
     /**
+     * YORDAMCHI METOD: ID lar ro'yxatidan Entity lar ro'yxatini yasash
+     */
+    private List<AttachEntity> getAttachListFromIds(List<String> ids) {
+        List<AttachEntity> list = new ArrayList<>();
+        if (ids != null && !ids.isEmpty()) {
+            for (String id : ids) {
+                list.add(attachService.getEntity(id));
+            }
+        }
+        return list;
+    }
+
+    /**
+     * YORDAMCHI METOD: Keraksiz rasmlarni o'chirish (Diff Logic)
+     * Bu metod faqat UPDATE bo'lganda ishlatiladi.
+     */
+    private void updatePhotoList(List<AttachEntity> oldEntities, List<String> newIds, boolean isMandatory) {
+        if (newIds == null) return; // Agar null kelsa tegmaymiz (lekin DTOda majburiy bo'lsa validation o'tmaydi)
+
+        // 1. Eskilarni ID sini olamiz
+        List<String> oldIds = new ArrayList<>();
+        if (oldEntities != null) {
+            oldIds = oldEntities.stream().map(AttachEntity::getId).toList();
+        }
+
+        // 2. Keraksizlarni o'chiramiz (Eskida bor, Yangida yo'q)
+        for (String oldId : oldIds) {
+            if (!newIds.contains(oldId)) {
+                try {
+                    attachService.delete(oldId);
+                } catch (Exception e) {
+                    log.warn("Rasmni o'chirishda xato: {}", oldId);
+                }
+            }
+        }
+    }
+
+
+    /**
      * 2. STATUS O'ZGARTIRISH (Admin)
      * Bu metodda ROLE o'zgaradi!
      */
+    /**
+     * 2. STATUS O'ZGARTIRISH (Admin)
+     */
     public String changeStatus(Long doctorDetailsId, ApplicationStatus newStatus, String reason) {
-        // 1. Arizani topamiz
+        // 1. Arizani topamiz (Faqat bir marta e'lon qilamiz)
         DoctorDetailsEntity entity = doctorDetailsRepository.findById(doctorDetailsId)
                 .orElseThrow(() -> new AppBadException("Ariza topilmadi"));
 
@@ -111,12 +159,12 @@ public class DoctorDetailsService {
             entity.setStatus(ApplicationStatus.APPROVED);
             entity.setRejectionReason(null);
 
-            // 🔥 ROLNI QO'SHISH 🔥
+            // 🔥 ROLNI QO'SHISH (Agar yo'q bo'lsa) 🔥
 
             // 1. Profil ID sini olamiz
             Integer profileId = entity.getProfile().getId();
 
-            // 2. Hozirgi rollarni tekshiramiz (Repositorydagi tayyor Query orqali)
+            // 2. Hozirgi rollarni tekshiramiz (Repositorydagi query orqali)
             List<ProfileRole> currentRoles = profileRoleRepository.getAllRolesListByProfileId(profileId);
 
             boolean isAlreadyDoctor = currentRoles.contains(ProfileRole.ROLE_DOCTOR);
@@ -124,8 +172,8 @@ public class DoctorDetailsService {
             if (!isAlreadyDoctor) {
                 ProfileRoleEntity newRoleEntity = new ProfileRoleEntity();
 
-                // DIQQAT: Sizda 'profile' maydoni insertable=false bo'lgani uchun,
-                // biz to'g'ridan-to'g'ri ID ustuniga set qilamiz.
+                // DIQQAT: Sizning Entityda 'profile' insertable=false,
+                // shuning uchun to'g'ridan-to'g'ri ID ustuniga set qilamiz.
                 newRoleEntity.setProfileId(profileId);
 
                 newRoleEntity.setRoles(ProfileRole.ROLE_DOCTOR);
@@ -135,8 +183,9 @@ public class DoctorDetailsService {
             }
         }
 
-        // DoctorDetails ni saqlash
+        // DoctorDetails ni saqlash (Update)
         doctorDetailsRepository.save(entity);
+
         return "Status o'zgartirildi: " + newStatus;
     }
 
@@ -165,9 +214,9 @@ public class DoctorDetailsService {
         dto.setUpdatedDate(entity.getUpdatedDate());
 
         // Diplom ID sini berib, to'liq URL olamiz
-        if (entity.getDiplomId() != null) {
-            dto.setDiplom(attachService.attachDTO(entity.getDiplomId()));
-        }
+        // --- LISTLARNI DTO GA O'GIRISH ---
+        dto.setDiplomList(toAttachDTOList(entity.getDiplomList()));
+        dto.setCertificateList(toAttachDTOList(entity.getCertificateList()));
 
         return dto;
     }
@@ -200,9 +249,24 @@ public class DoctorDetailsService {
         dto.setDegree(entity.getDegree());
         dto.setCurrentWorkplace(entity.getCurrentWorkplace());
         dto.setExperienceYear(entity.getExperienceYear());
+        // 🔥 SERTIFIKATLARNI ULASH 🔥
+        // Bizda pastda "toAttachDTOList" yordamchi metodi bor edi (Admin qismida yozgandik)
+        // O'shandan foydalanamiz:
+        dto.setCertificateList(toAttachDTOList(entity.getCertificateList()));
 
         // DIPLOM BERILMAYDI!
         return dto;
+    }
+
+    // Yordamchi metod: List<Entity> -> List<DTO>
+    private List<AttachDTO> toAttachDTOList(List<AttachEntity> entities) {
+        List<AttachDTO> dtos = new ArrayList<>();
+        if (entities != null) {
+            for (AttachEntity entity : entities) {
+                dtos.add(attachService.toDTO(entity));
+            }
+        }
+        return dtos;
     }
 
     /**

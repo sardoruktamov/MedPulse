@@ -1,6 +1,6 @@
 ### O'zgaruvchilar (O'zingizning Tokenlaringizni qo'ying)
-@userToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5NzI3MTA2MzEiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMiIsImlhdCI6MTc2OTYxODYzMiwiZXhwIjoxNzY5NzA1MDMyfQ.BKEw-oxyv8-T0OB8oZb62XHEhIOQRHbd2YFJV3S5DkG5IqavfUdQlARlZ2Asitc-K_jJL9264Z9EyI5GwfR9qA
-@adminToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3Njk2MTg2OTEsImV4cCI6MTc2OTcwNTA5MX0.Y3dbTEJnFy-5AQ8erYa-Lt9o1VKR8tOBHfagw7xVsnOzJexU3aMNb02QHZqaCExucc27ENh_jbupKjIW9xdv1A
+@userToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXJkb3JiZWsudWt0YW1vdi4xQG1haWwucnUiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMTYiLCJpYXQiOjE3Njk3NjY1MTEsImV4cCI6MTc2OTg1MjkxMX0.et-h0nzKeeJ9WEXuQvbUqXQ26iZnLlQehF8m_oBV2euDlIi_8WVWvQmm-YuCfEySg8wqXDrgO4Dge7H4TKcTqw
+@adminToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTY5OTI0NywiZXhwIjoxNzY5Nzg1NjQ3fQ.Zv8hFh6OMj714P8WBNTQi5S5heVbt9hKqtVTwPFpdoxg1-k4_nYPl5InOjSJxdu4foFcKKHRjogha7uHoumJXw
 
 ###
 # ---------------------------------------------------------
@@ -9,7 +9,7 @@
 # ---------------------------------------------------------
 POST http://localhost:8080/api/v1/attach/upload
 Content-Type: multipart/form-data; boundary=boundary
-Authorization: Bearer {{userToken}}
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXJkb3JiZWsudWt0YW1vdi4xQG1haWwucnUiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMTYiLCJpYXQiOjE3Njk3NjY1MTEsImV4cCI6MTc2OTg1MjkxMX0.et-h0nzKeeJ9WEXuQvbUqXQ26iZnLlQehF8m_oBV2euDlIi_8WVWvQmm-YuCfEySg8wqXDrgO4Dge7H4TKcTqw
 
 --boundary
 Content-Disposition: form-data; name="file"; filename="DXM.jpg"
@@ -27,7 +27,7 @@ Content-Type: image/jpeg
 # ---------------------------------------------------------
 POST http://localhost:8080/api/v1/doctor-apply
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5NzI3MTA2MzEiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMiIsImlhdCI6MTc2OTYxODYzMiwiZXhwIjoxNzY5NzA1MDMyfQ.BKEw-oxyv8-T0OB8oZb62XHEhIOQRHbd2YFJV3S5DkG5IqavfUdQlARlZ2Asitc-K_jJL9264Z9EyI5GwfR9qA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXJkb3JiZWsudWt0YW1vdi4xQG1haWwucnUiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMTYiLCJpYXQiOjE3Njk3NjY1MTEsImV4cCI6MTc2OTg1MjkxMX0.et-h0nzKeeJ9WEXuQvbUqXQ26iZnLlQehF8m_oBV2euDlIi_8WVWvQmm-YuCfEySg8wqXDrgO4Dge7H4TKcTqw
 
 {
   "speciality": "Kardiolog",
@@ -36,7 +36,15 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5NzI3MTA2MzEiLCJyb2xlc
   "graduatedDate": "2018-06-25",
   "experienceYear": 5,
   "currentWorkplace": "Akfa Medline",
-  "diplomId": "6d50fb67-b58b-4401-8c03-1b90680b4648.jpg",
+  "diplomPhotoIds": [
+    "1ac6ecd5-3300-40b1-883f-0af47e1e88f0.jpg",
+    "d9c2ca8d-c07a-4b7c-b404-4019b493e8f0.jpg"
+  ],
+
+  "certificatePhotoIds": [
+    "c3c14865-749d-42f9-b1d2-93f9d44368d1.jpg",
+    "14f68b64-be2c-4010-881c-9b420bb3e260.jpg"
+  ],
   "agreementPolicy": true
 }
 
@@ -49,7 +57,7 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5NzI3MTA2MzEiLCJyb2xlc
 # ---------------------------------------------------------
 PUT http://localhost:8080/api/v1/doctor-apply/change-status/1?status=APPROVED
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3Njk2MTg2OTEsImV4cCI6MTc2OTcwNTA5MX0.Y3dbTEJnFy-5AQ8erYa-Lt9o1VKR8tOBHfagw7xVsnOzJexU3aMNb02QHZqaCExucc27ENh_jbupKjIW9xdv1A
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTY5OTI0NywiZXhwIjoxNzY5Nzg1NjQ3fQ.Zv8hFh6OMj714P8WBNTQi5S5heVbt9hKqtVTwPFpdoxg1-k4_nYPl5InOjSJxdu4foFcKKHRjogha7uHoumJXw
 
 ###
 
@@ -66,10 +74,11 @@ Authorization: Bearer {{adminToken}}
 # ---------------------------------------------------------
 # 4-QADAM: ADMIN KO'RISHI (Full Data)
 # Bunda Diplom URL va Rad etish sabablari ko'rinadi.
+# URL dagi "1" bu doctor_details jadvalidagi ID (ariza ID si).
 # ---------------------------------------------------------
 GET http://localhost:8080/api/v1/doctor-apply/admin/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3Njk2MTg2OTEsImV4cCI6MTc2OTcwNTA5MX0.Y3dbTEJnFy-5AQ8erYa-Lt9o1VKR8tOBHfagw7xVsnOzJexU3aMNb02QHZqaCExucc27ENh_jbupKjIW9xdv1A
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTY5OTI0NywiZXhwIjoxNzY5Nzg1NjQ3fQ.Zv8hFh6OMj714P8WBNTQi5S5heVbt9hKqtVTwPFpdoxg1-k4_nYPl5InOjSJxdu4foFcKKHRjogha7uHoumJXw
 
 ###
 
@@ -80,7 +89,7 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlc
 # ---------------------------------------------------------
 GET http://localhost:8080/api/v1/doctor-apply/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3Njk2MTg2OTEsImV4cCI6MTc2OTcwNTA5MX0.Y3dbTEJnFy-5AQ8erYa-Lt9o1VKR8tOBHfagw7xVsnOzJexU3aMNb02QHZqaCExucc27ENh_jbupKjIW9xdv1A
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXJkb3JiZWsudWt0YW1vdi4xQG1haWwucnUiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMTYiLCJpYXQiOjE3Njk3NjY1MTEsImV4cCI6MTc2OTg1MjkxMX0.et-h0nzKeeJ9WEXuQvbUqXQ26iZnLlQehF8m_oBV2euDlIi_8WVWvQmm-YuCfEySg8wqXDrgO4Dge7H4TKcTqw
 
 ### Login
 POST localhost:8080/api/v1/auth/login

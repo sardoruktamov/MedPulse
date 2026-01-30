@@ -4,11 +4,11 @@ Content-Type: application/json
 Accept-Language: UZ
 
 {
-  "name": "Burxonov Baxodir",
-  "username": "998972710631",
+  "name": "Haydarov Azizbek",
+  "username": "sardorbek.uktamov.1@mail.ru",
   "password": "12345",
   "gender": "MALE",
-  "birthDate": "1990-06-10"
+  "birthDate": "1990-10-04"
 }
 
 ### Registration verification
@@ -21,7 +21,7 @@ Accept-Language: UZ
 
 {
   "phoneNumber": "998972710631",
-  "code": "65007"
+  "code": "58246"
 }
 
 ### Registration sms verification RESENT
@@ -54,12 +54,12 @@ Accept-Language: UZ
 }
 
 ### Login
-POST localhost:8080/auth/login
+POST localhost:8080/api/v1/auth/login
 Content-Type: application/json
 Accept-Language: UZ
 
 {
-  "username": "uktamov9198@mail.ru",
+  "username": "sardorbek.uktamov.1@mail.ru",
   "password": "12345"
 }
 

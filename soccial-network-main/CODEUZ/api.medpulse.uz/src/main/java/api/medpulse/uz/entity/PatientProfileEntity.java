@@ -39,6 +39,7 @@ public class PatientProfileEntity {
     private Double weight;
     private Double height;
     private String workingBloodPressure;
+    // TODO - QAYSI ANTIBIOTIKLARGA ALLERGIYASI BORLIGI MALUMTOINI QOSHISH KERAK
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")

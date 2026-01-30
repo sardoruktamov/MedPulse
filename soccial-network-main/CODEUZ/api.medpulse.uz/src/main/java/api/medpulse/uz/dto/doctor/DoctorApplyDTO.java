@@ -2,10 +2,12 @@ package api.medpulse.uz.dto.doctor;
 
 import api.medpulse.uz.enums.DoctorDegree;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,8 +29,11 @@ public class DoctorApplyDTO {
 
     private String currentWorkplace;
 
-    @NotBlank(message = "Diplom yuklanishi shart")
-    private String diplomId; // Rasm ID si
+    @NotEmpty(message = "Kamida bitta diplom yuklanishi shart")
+    private List<String> diplomPhotoIds;
+
+    // --- SERTIFIKATLAR (Ixtiyoriy) ---
+    private List<String> certificatePhotoIds; // Null yoki bo'sh bo'lishi mumkin
 
     @NotNull(message = "Yuridik shartlarga rozilik kerak")
     private Boolean agreementPolicy;

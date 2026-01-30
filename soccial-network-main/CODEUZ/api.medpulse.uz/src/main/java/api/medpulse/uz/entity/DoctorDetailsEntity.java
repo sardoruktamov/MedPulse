@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "doctor_details")
@@ -45,14 +46,23 @@ public class DoctorDetailsEntity {
     @Column(name = "current_workplace")
     private String currentWorkplace; // M: Akfa Medline
 
-    // --- Diplom Rasmi (Bizning Standart) ---
-    @Column(name = "diploma_id")
-    @JsonIgnore
-    private String diplomId;
+    // --- 1. DIPLOMLAR (Majburiy, Ko'p) --CascadeType.ALL- gar List ichida narsa bo‘lsa, uni ham saqlayman
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "doctor_diploms", // Alohida jadval bo'ladi
+            joinColumns = @JoinColumn(name = "doctor_details_id"),
+            inverseJoinColumns = @JoinColumn(name = "attach_id")
+    )
+    private List<AttachEntity> diplomList;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "diploma_id", insertable = false, updatable = false)
-    private AttachEntity diplom;
+    // --- 2. SERTIFIKATLAR (Ixtiyoriy, Ko'p) ---
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "doctor_certificates", // Bu ham alohida jadval
+            joinColumns = @JoinColumn(name = "doctor_details_id"),
+            inverseJoinColumns = @JoinColumn(name = "attach_id")
+    )
+    private List<AttachEntity> certificateList;
 
     // --- Ariza Holati ---
     @Enumerated(EnumType.STRING)
