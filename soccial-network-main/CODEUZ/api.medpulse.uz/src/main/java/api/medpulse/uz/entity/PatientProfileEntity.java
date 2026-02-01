@@ -39,7 +39,15 @@ public class PatientProfileEntity {
     private Double weight;
     private Double height;
     private String workingBloodPressure;
-    // TODO - QAYSI ANTIBIOTIKLARGA ALLERGIYASI BORLIGI MALUMTOINI QOSHISH KERAK
+
+    @Column(name = "allergies", columnDefinition = "TEXT")
+    private String allergies; // Masalan: "Penitsillin, Chang, Tutun"
+
+    @Column(name = "emergency_contact_name")
+    private String emergencyContactName; // Kimligi (Masalan: Otasi - Eshmatov Toshmat)
+
+    @Column(name = "emergency_contact_phone")
+    private String emergencyContactPhone; // Bog'lanish uchun raqam: +998901234567
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")

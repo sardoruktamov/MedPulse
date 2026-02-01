@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
@@ -82,7 +83,7 @@ public class SmsSendService {
         message = String.format(message,code);
         sendSms(username,message,code,SmsType.CHANGE_USERNAME_CONFIRM, lang);
     }
-    private SmsSendResponseDTO sendSms(String phoneNuber, String message, AppLanguage lang){
+    private SmsSendResponseDTO sendSms(String phoneNumber, String message, AppLanguage lang){
         // get token
         String token = getToken();
         // header
@@ -91,10 +92,10 @@ public class SmsSendService {
         headers.set("Authorization","Bearer " + token);
         // body
         SmsRequestDTO body = new SmsRequestDTO();
-        body.setMobile_phone(phoneNuber);
+        body.setMobile_phone(phoneNumber);
         // message -> vaqtincha o'zgaruvchi TODO message SHARTNOMA TUZILGANDA O'ZGARTIRISH
-        message = bundleService.getMessage("sms.registration.confirmcode",lang);
-        body.setMessage(message);
+//        message = bundleService.getMessage("sms.registration.confirmcode",lang);
+        body.setMessage(bundleService.getMessage("sms.registration.confirmcode",lang));
         body.setFrom("4546");
         // send request
         HttpEntity<SmsRequestDTO> entity = new HttpEntity<>(body,headers);
@@ -105,12 +106,25 @@ public class SmsSendService {
                     entity,
                     SmsSendResponseDTO.class);//smsUrlga POST request yubor ENTITYni va Stringga konvert qil
 
+            log.error("xaaaattttttooooooo: phoneNuber: " + phoneNumber);
+            log.error("xaaaattttttooooooo: message: " + message);
+            log.error("xaaaattttttooooooo: tel nomer: " + body.getFrom());
+
             System.out.println("-------------SMS yuborildiiiii---------------");
             SmsSendResponseDTO responseDTO = new SmsSendResponseDTO();
             return response.getBody();
+        }catch (HttpClientErrorException e) {
+            // Eskizdan 400, 401 kabi xatolar kelsa shu yerga tushadi
+            log.error("Eskiz API Error: {}", e.getResponseBodyAsString());
+
+            // Agar balans tugagan bo'lsa, aniqroq xato tashlash yoki userga bildirish kerak
+            if (e.getResponseBodyAsString().contains("fill the balance")) {
+                log.error("DIQQAT! Eskiz.uz balansida pul tugadi!");
+            }
+            throw new AppBadException(bundleService.getMessage("error.sending.sms", lang));
         }catch (RuntimeException e){
             e.printStackTrace();
-            log.error("Send SMS phone: {}, message: {}, ERROR: {}", phoneNuber,message, e.getMessage());
+            log.error("Send SMS phone: {}, message: {}, ERROR: {}", phoneNumber,message, e.getMessage());
             throw new AppBadException(bundleService.getMessage("error.sending.sms",lang));
 
         }
@@ -157,8 +171,8 @@ public class SmsSendService {
 
         try {
             // 2-usulda token olish
-                SmsAuthResponseDTO response = restTemplate.postForObject(smsUrl + "/auth/login", smsAuthDTO, SmsAuthResponseDTO.class);
-            System.out.println(response);
+            SmsAuthResponseDTO response = restTemplate.postForObject(smsUrl + "/auth/login", smsAuthDTO, SmsAuthResponseDTO.class);
+            log.error("G---------------/auth/login------------------nt" + response);
             return response.getData().getToken();
         } catch (RuntimeException e) {
             log.error("Get token from provider. account: {}, ERROR: {}", accountLogin, e.getMessage());

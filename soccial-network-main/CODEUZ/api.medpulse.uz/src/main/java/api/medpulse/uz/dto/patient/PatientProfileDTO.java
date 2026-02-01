@@ -21,4 +21,8 @@ public class PatientProfileDTO {
     private Double weight;
     private Double height;
     private String workingBloodPressure;
+
+    private String allergies;            // Allergiya haqida matn
+    private String emergencyContactName; // Yaqin insonining ismi/qarindoshligi
+    private String emergencyContactPhone;// Yaqin insonining telefoni
 }

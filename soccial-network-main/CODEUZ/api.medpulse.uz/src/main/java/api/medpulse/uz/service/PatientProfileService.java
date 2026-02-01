@@ -13,6 +13,7 @@ import api.medpulse.uz.repository.PatientProfileRepository;
 import api.medpulse.uz.repository.ProfileRepository;
 import api.medpulse.uz.util.SpringSecurityUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PatientProfileService {
 
     @Autowired
@@ -62,7 +64,21 @@ public class PatientProfileService {
         if (dto.getWeight() != null) entity.setWeight(dto.getWeight());
         if (dto.getHeight() != null) entity.setHeight(dto.getHeight());
         if (dto.getWorkingBloodPressure() != null) entity.setWorkingBloodPressure(dto.getWorkingBloodPressure());
+        // 1. Allergiyani yangilash
+        if (dto.getAllergies() != null) {
+            entity.setAllergies(dto.getAllergies());
+        }
 
+        // 2. Favqulodda bog'lanish shaxsini yangilash
+        if (dto.getEmergencyContactName() != null) {
+            entity.setEmergencyContactName(dto.getEmergencyContactName());
+        }
+
+        // 3. Favqulodda telefon raqamni yangilash
+        if (dto.getEmergencyContactPhone() != null) {
+            // Telefon raqamni formatlash yoki tozalash kerak bo'lsa shu yerda qilinadi
+            entity.setEmergencyContactPhone(dto.getEmergencyContactPhone());
+        }
         // 4. Saqlash
         patientProfileRepository.save(entity);
         // 2. Agar rasm o'zgargan bo'lsa, eski rasmni AttachService orqali o'chiramiz
@@ -128,6 +144,9 @@ public class PatientProfileService {
         dto.setBloodGroup(entity.getBloodGroup());
         dto.setWeight(entity.getWeight());
         dto.setHeight(entity.getHeight());
+        dto.setAllergies(entity.getAllergies());
+        dto.setEmergencyContactName(entity.getEmergencyContactName());
+        dto.setEmergencyContactPhone(entity.getEmergencyContactPhone());
         dto.setWorkingBloodPressure(entity.getWorkingBloodPressure());
         return dto;
     }

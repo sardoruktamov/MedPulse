@@ -17,6 +17,10 @@ public class PatientUpdateDTO {
     private LocalDate birthDate;
     private Gender gender;
 
+    private String allergies;            // Allergiya haqida matn
+    private String emergencyContactName; // Yaqin insonining ismi/qarindoshligi
+    private String emergencyContactPhone;// Yaqin insonining telefoni
+
     // Tibbiy ma'lumotlar
     private String photoId; // Rasm yuklagandan keyin keladigan ID
     private BloodGroup bloodGroup; // qon guruxi

@@ -1,18 +1,21 @@
 ### OTA PatientProfil malumotlarini olish
 GET http://localhost:8080/api/v1/patient/my-profiles
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTUwODEwOSwiZXhwIjoxNzY5NTk0NTA5fQ.V2NKbnzPA0dWDThre9_vSMWpcHyvgROEaz2CUNyTiBh41Qgwg3BAxg4Eww_OECRuCWyGvcHGpoL1jRpWQNXvyQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3Njk5NTQzMDIsImV4cCI6MTc3MDA0MDcwMn0.F2DaDdL_knHRuBDm5g1z5N9H2r7yc0gWklkrUaj26B93Fsj-ltRiZAvNHMfq7fbrgGNihw_qqEVaEi61LmFsgg
 
 {
 }
 
 ### Ota o'zi yoki oila azosining patientProfileEntty qismini tahrirlash
-PUT http://localhost:8080/api/v1/patient/9c4f270f-33e5-4636-9e28-ed0b428c9da1
+PUT http://localhost:8080/api/v1/patient/7ffe334d-7c50-47a1-95f9-5d1965eabc76
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXJkb3JiZWsudWt0YW1vdi4xQG1haWwucnUiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMTYiLCJpYXQiOjE3Njk3NjY1MTEsImV4cCI6MTc2OTg1MjkxMX0.et-h0nzKeeJ9WEXuQvbUqXQ26iZnLlQehF8m_oBV2euDlIi_8WVWvQmm-YuCfEySg8wqXDrgO4Dge7H4TKcTqw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3Njk5NTQzMDIsImV4cCI6MTc3MDA0MDcwMn0.F2DaDdL_knHRuBDm5g1z5N9H2r7yc0gWklkrUaj26B93Fsj-ltRiZAvNHMfq7fbrgGNihw_qqEVaEi61LmFsgg
 
 {
-  "photoId": "b6dc146c-0cd2-4b07-b8e5-4adfc4b7480f.jpg"
+  "photoId": "b6dc146c-0cd2-4b07-b8e5-4adfc4b7480f.jpg",
+  "allergies": "chang va tutunga, Paratsetamol",
+  "emergencyContactName": "onam Sobirova Munojatxon",
+  "emergencyContactPhone": "99891-118-49-52"
 }
 
 ### Oila a'zosini qo'shish (Farzand yoki boshqa)

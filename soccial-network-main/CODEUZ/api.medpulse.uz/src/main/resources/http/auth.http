@@ -4,8 +4,8 @@ Content-Type: application/json
 Accept-Language: UZ
 
 {
-  "name": "Haydarov Azizbek",
-  "username": "sardorbek.uktamov.1@mail.ru",
+  "name": "Olimov Anvar",
+  "username": "998930766777",
   "password": "12345",
   "gender": "MALE",
   "birthDate": "1990-10-04"
