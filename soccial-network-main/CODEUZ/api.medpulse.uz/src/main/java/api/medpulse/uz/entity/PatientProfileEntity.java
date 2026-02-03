@@ -53,4 +53,8 @@ public class PatientProfileEntity {
     @JoinColumn(name = "owner_id")
     @JsonIgnore //Bu entityni JSON ga aylantirayotganda owner maydonini tashlab ket, ichiga kirma.
     private ProfileEntity owner; // Akkaunt egasi (Ota/Ona)
+
+    // QR kod uchun qisqa token
+    @Column(name = "qr_token", length = 10, unique = true)
+    private String qrToken;
 }

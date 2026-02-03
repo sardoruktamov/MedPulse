@@ -22,6 +22,10 @@ public class PatientCreateDTO {
     @NotNull(message = "Jins tanlanishi shart")
     private Gender gender; // Enum: MALE, FEMALE
 
+    private String allergies;            // Allergiya haqida matn
+    private String emergencyContactName; // Yaqin insonining ismi/qarindoshligi
+    private String emergencyContactPhone;// Yaqin insonining telefoni
+
     // Ixtiyoriy qismlar (birdaniga qo'shib ketish uchun)
     private String photoId;
     private BloodGroup bloodGroup; // Enum

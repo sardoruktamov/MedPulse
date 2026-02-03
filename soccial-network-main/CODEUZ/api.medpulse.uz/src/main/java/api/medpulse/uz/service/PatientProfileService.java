@@ -11,6 +11,7 @@ import api.medpulse.uz.entity.ProfileEntity;
 import api.medpulse.uz.exps.AppBadException;
 import api.medpulse.uz.repository.PatientProfileRepository;
 import api.medpulse.uz.repository.ProfileRepository;
+import api.medpulse.uz.util.RandomUtil;
 import api.medpulse.uz.util.SpringSecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +65,9 @@ public class PatientProfileService {
         if (dto.getWeight() != null) entity.setWeight(dto.getWeight());
         if (dto.getHeight() != null) entity.setHeight(dto.getHeight());
         if (dto.getWorkingBloodPressure() != null) entity.setWorkingBloodPressure(dto.getWorkingBloodPressure());
+        // Token generatsiya qilish
+        entity.setQrToken(RandomUtil.generateQrToken());
+
         // 1. Allergiyani yangilash
         if (dto.getAllergies() != null) {
             entity.setAllergies(dto.getAllergies());
@@ -109,7 +113,25 @@ public class PatientProfileService {
         if (dto.getBloodGroup() != null) entity.setBloodGroup(dto.getBloodGroup());
         if (dto.getWeight() != null) entity.setWeight(dto.getWeight());
         if (dto.getHeight() != null) entity.setHeight(dto.getHeight());
+        if (dto.getWorkingBloodPressure() != null) entity.setWorkingBloodPressure(dto.getWorkingBloodPressure());
+// Token generatsiya qilish
+        entity.setQrToken(RandomUtil.generateQrToken());
 
+        // 1. Allergiyani yangilash
+        if (dto.getAllergies() != null) {
+            entity.setAllergies(dto.getAllergies());
+        }
+
+        // 2. Favqulodda bog'lanish shaxsini yangilash
+        if (dto.getEmergencyContactName() != null) {
+            entity.setEmergencyContactName(dto.getEmergencyContactName());
+        }
+
+        // 3. Favqulodda telefon raqamni yangilash
+        if (dto.getEmergencyContactPhone() != null) {
+            // Telefon raqamni formatlash yoki tozalash kerak bo'lsa shu yerda qilinadi
+            entity.setEmergencyContactPhone(dto.getEmergencyContactPhone());
+        }
         // 5. Saqlash
         patientProfileRepository.save(entity);
         return toDTO(entity);

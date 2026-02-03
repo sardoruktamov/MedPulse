@@ -4,11 +4,14 @@ import api.medpulse.uz.dto.patient.PatientCreateDTO;
 import api.medpulse.uz.dto.patient.PatientProfileDTO;
 import api.medpulse.uz.dto.patient.PatientUpdateDTO;
 import api.medpulse.uz.entity.PatientProfileEntity;
+import api.medpulse.uz.repository.PatientProfileRepository;
 import api.medpulse.uz.service.PatientProfileService;
+import api.medpulse.uz.service.QrCodeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +23,11 @@ import java.util.List;
 @Tag(name = "PatientProfile", description = "Bemor profili va Oila a'zolari bilan ishlash")
 public class PatientProfileController {
 
-    @Autowired
-    private PatientProfileService patientProfileService;
+
+    private final QrCodeService qrCodeService;
+    private final PatientProfileRepository patientProfileRepository; // Token orqali topish uchun
+
+    private final PatientProfileService patientProfileService;
 
     // 1. Mening profillarim (O'zim va oilam) ro'yxati
     // Frontend shu yerdan ID larni oladi
@@ -42,5 +48,26 @@ public class PatientProfileController {
     @PostMapping("/family")
     public ResponseEntity<PatientProfileDTO> createMember(@Valid @RequestBody PatientCreateDTO dto) {
         return ResponseEntity.ok(patientProfileService.create(dto));
+    }
+
+
+    // -------------------------------------------------------
+    // 1-METOD: QR KOD RASMINI YASAB BERISH (Bemor uchun)
+    // Ilova murojaat qiladi: /api/v1/patient/qr/{patientId}
+    // -------------------------------------------------------
+    @GetMapping(value = "/qr/{patientId}", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> getQrImage(@PathVariable String patientId) {
+        return ResponseEntity.ok(qrCodeService.generateQrForPatient(patientId));
+    }
+
+    // -------------------------------------------------------
+    // 2-METOD: QISQA LINKNI QABUL QILISH (Shifokor skaner qilganda)
+    // Shifokor telefoni ochadi: /api/v1/patient/q/{qrToken}
+    // -------------------------------------------------------
+    @GetMapping("/q/{qrToken}")
+    public ResponseEntity<String> handleShortLink(@PathVariable String qrToken) {
+        return patientProfileRepository.findByQrToken(qrToken)
+                .map(p -> ResponseEntity.ok("To'liq ma'lumot: " + p.getFullName()))
+                .orElse(ResponseEntity.notFound().build());
     }
 }

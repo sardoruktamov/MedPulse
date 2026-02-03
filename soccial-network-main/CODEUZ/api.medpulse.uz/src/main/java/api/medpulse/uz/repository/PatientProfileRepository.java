@@ -18,4 +18,6 @@ public interface PatientProfileRepository extends CrudRepository<PatientProfileE
     // Foydalanuvchining barcha profillarini olish (O'ziniki va oilasiniki)
     // Bu metod frontendga qaysi ID ni update qilish kerakligini bilish uchun kerak
     List<PatientProfileEntity> findByOwner_Id(Integer currentUserId);
+
+    Optional<PatientProfileEntity> findByQrToken(String qrToken);
 }
