@@ -51,23 +51,10 @@ public class PatientProfileController {
     }
 
 
-    // -------------------------------------------------------
-    // 1-METOD: QR KOD RASMINI YASAB BERISH (Bemor uchun)
-    // Ilova murojaat qiladi: /api/v1/patient/qr/{patientId}
-    // -------------------------------------------------------
+    // Bemor o'z ilovasida QR kod rasmini ko'rish uchun
     @GetMapping(value = "/qr/{patientId}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> getQrImage(@PathVariable String patientId) {
         return ResponseEntity.ok(qrCodeService.generateQrForPatient(patientId));
     }
 
-    // -------------------------------------------------------
-    // 2-METOD: QISQA LINKNI QABUL QILISH (Shifokor skaner qilganda)
-    // Shifokor telefoni ochadi: /api/v1/patient/q/{qrToken}
-    // -------------------------------------------------------
-    @GetMapping("/q/{qrToken}")
-    public ResponseEntity<String> handleShortLink(@PathVariable String qrToken) {
-        return patientProfileRepository.findByQrToken(qrToken)
-                .map(p -> ResponseEntity.ok("To'liq ma'lumot: " + p.getFullName()))
-                .orElse(ResponseEntity.notFound().build());
-    }
 }
