@@ -17,6 +17,9 @@ public interface HealthRecordRepository extends CrudRepository<HealthRecordEntit
     // OrderByCreatedDateDesc - eng oxirgi qo'shilgan kasallik birinchi chiqadi
     List<HealthRecordEntity> findByPatientIdOrderByCreatedDateDesc(String patientId);
 
+    // Bemorni ID si va isCritical=true bo'lgan kasallik tarixlarini topish
+    List<HealthRecordEntity> findAllByPatientIdAndIsCriticalTrue(String patientId);
+
     // kasalliklar Ro'yxatini olish
     List<HealthRecordEntity> findByPatientIdOrderByRecordDateDesc(String patientId);
 
