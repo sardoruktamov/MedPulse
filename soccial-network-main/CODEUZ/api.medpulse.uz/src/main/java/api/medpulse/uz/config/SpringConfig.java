@@ -67,6 +67,7 @@ public class SpringConfig {
                     .requestMatchers(HttpMethod.GET,"/api/v1/posts/public/*").permitAll()
                     .requestMatchers("/api/v1/patient/**").authenticated() // Login qilgan hamma kira olsin
                     .requestMatchers("/api/v1/health-record/**").authenticated() // Kasallik tarixiga ham ruxsat
+                    .requestMatchers("/api/v1/public/qr/**").permitAll()        // QR kod orqali malumotlarni korish
                     .anyRequest()
                     .authenticated();
         }).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
