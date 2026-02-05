@@ -1,0 +1,46 @@
+# Tizimga kirganda berilgan Bearer Tokenni shu yerga
+@authToken = SIZNING_ACCESS_TOKENINGIZ
+
+# Test qilinadigan Bemor ID si (Bazadan oling)
+@patientId = a1b2c3d4-1234-5678-90ab-cdef12345678
+
+### -------------------------------------------------------------------------
+# 1-QADAM: QR KOD RASMINI YARATISH (Bemor ilovada ko'radi)
+# -------------------------------------------------------------------------
+# Bu so'rov orqali:
+# 1. Tizim bemorga yangi 'qrToken' generatsiya qiladi (agar yo'q bo'lsa).
+# 2. Javob sifatida PNG rasm qaytadi.
+# 3. Siz bu rasmni ko'z bilan ko'rasiz, lekin token ichida yashiringan bo'ladi.
+GET http://localhost:8080/api/v1/patient/qr/{{patientId}}
+Authorization: Bearer {{authToken}}
+Accept: image/png
+
+# >>>> MUHIM QADAM <<<<
+# Yuqoridagi so'rov ishligandan so'ng, BAZAGA KIRING ("patient_profile" jadvali)
+# va o'sha bemorning "qr_token" ustunidagi qiymatni nusxalab oling.
+# Masalan: XyZ123
+
+# -------------------------------------------------------------------------
+# 2-QADAM: SHIFOKOR SIFATIDA MA'LUMOTNI O'QISH (Public API)
+# -------------------------------------------------------------------------
+# Bu yerga bazadan olgan tokenni qo'ying
+@qrToken = XyZ123
+
+### Bu so'rovda Authorization (Token) SHART EMAS!
+# Chunki shifokor login qilmaydi.
+GET http://localhost:8080/api/v1/public/qr/info/{{qrToken}}
+Content-Type: application/json
+
+### KUTILAYOTGAN NATIJA (JSON):
+# {
+#   "fullName": "Eshmatov Toshmat",
+#   "photoUrl": "/api/v1/attach/open/...",
+#   "bloodGroup": "A_POSITIVE",
+#   "criticalRecords": [
+#     {
+#       "diseaseName": "Qandli diabet",
+#       "treatment": "Insulin",
+#       "date": "2025-01-20"
+#     }
+#   ]
+# }
