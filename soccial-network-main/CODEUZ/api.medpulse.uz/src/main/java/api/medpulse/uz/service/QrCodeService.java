@@ -39,15 +39,12 @@ public class QrCodeService {
             patientProfileRepository.save(patient);
         }
 
-        String bloodGroup = (patient.getBloodGroup() != null) ? String.valueOf(patient.getBloodGroup()) : "-";
-        String sosPhone = (patient.getEmergencyContactPhone() != null) ? patient.getEmergencyContactPhone() : "-";
-
         // URL MANZILI: Bu manzil Frontenddagi sahifaga olib borishi kerak!
         // Masalan: https://medpulse.uz/q/XyZ123
         String shortUrl = String.format("%s/q/%s", baseUrl, patient.getQrToken());
 
         // QR tarkibi: URL + Matn (Gibrid usul)
-        String qrContent = String.format("%s\n\nQon: %s\nSOS: %s", shortUrl, bloodGroup, sosPhone);
+        String qrContent = String.format("%s", shortUrl);
 
         try {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();

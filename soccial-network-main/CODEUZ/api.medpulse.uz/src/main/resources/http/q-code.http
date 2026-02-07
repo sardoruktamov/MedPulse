@@ -11,8 +11,8 @@
 # 1. Tizim bemorga yangi 'qrToken' generatsiya qiladi (agar yo'q bo'lsa).
 # 2. Javob sifatida PNG rasm qaytadi.
 # 3. Siz bu rasmni ko'z bilan ko'rasiz, lekin token ichida yashiringan bo'ladi.
-GET http://localhost:8080/api/v1/patient/qr/{{patientId}}
-Authorization: Bearer {{authToken}}
+GET http://localhost:8080/api/v1/patient/qr/7ffe334d-7c50-47a1-95f9-5d1965eabc76
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3NzA0NDAxMzcsImV4cCI6MTc3MDUyNjUzN30.vd1ZFiWCIr2_OMIlxCU1pUruISQVBvUQhbG5dwiyheMQ8EO3kWGDtRll3KKnKpPwv0tW91D81yhGKYl4lpjrwA
 Accept: image/png
 
 # >>>> MUHIM QADAM <<<<
@@ -24,11 +24,11 @@ Accept: image/png
 # 2-QADAM: SHIFOKOR SIFATIDA MA'LUMOTNI O'QISH (Public API)
 # -------------------------------------------------------------------------
 # Bu yerga bazadan olgan tokenni qo'ying
-@qrToken = XyZ123
+@qrToken = 11GKSa
 
 ### Bu so'rovda Authorization (Token) SHART EMAS!
 # Chunki shifokor login qilmaydi.
-GET http://localhost:8080/api/v1/public/qr/info/{{qrToken}}
+GET http://localhost:8080/api/v1/public/qr/info/11GKSa
 Content-Type: application/json
 
 ### KUTILAYOTGAN NATIJA (JSON):

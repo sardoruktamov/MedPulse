@@ -1,7 +1,7 @@
 ### Upload Attach
 POST http://localhost:8080/api/v1/attach/upload
 Content-Type: multipart/form-data; boundary=WebAppBoundary
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3Njk2MTg2OTEsImV4cCI6MTc2OTcwNTA5MX0.Y3dbTEJnFy-5AQ8erYa-Lt9o1VKR8tOBHfagw7xVsnOzJexU3aMNb02QHZqaCExucc27ENh_jbupKjIW9xdv1A
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3NzA0NDAxMzcsImV4cCI6MTc3MDUyNjUzN30.vd1ZFiWCIr2_OMIlxCU1pUruISQVBvUQhbG5dwiyheMQ8EO3kWGDtRll3KKnKpPwv0tW91D81yhGKYl4lpjrwA
 
 --WebAppBoundary
 Content-Disposition: form-data; name="file"; filename="ican.jpg"
@@ -12,21 +12,19 @@ Content-Disposition: form-data; name="file"; filename="ican.jpg"
 ### 1. Kasallik tarixini qo'shish (To'liq)-Qizimni ID si
 POST http://localhost:8080/api/v1/health-record/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3Njk2MTg2OTEsImV4cCI6MTc2OTcwNTA5MX0.Y3dbTEJnFy-5AQ8erYa-Lt9o1VKR8tOBHfagw7xVsnOzJexU3aMNb02QHZqaCExucc27ENh_jbupKjIW9xdv1A
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3NzA0NDAxMzcsImV4cCI6MTc3MDUyNjUzN30.vd1ZFiWCIr2_OMIlxCU1pUruISQVBvUQhbG5dwiyheMQ8EO3kWGDtRll3KKnKpPwv0tW91D81yhGKYl4lpjrwA
 
 {
-  "patientId": "5dc7b66b-1126-430c-89fa-8c0b5dbcf68a",
-  "diseaseName": "Ich buzilish",
-  "recordDate": "2025-11-20",
-  "doctorName": "DR.Numonaka",
-  "hospitalName": "Do'mdagi uyida davoladi",
-  "treatment": "Erseflora 3 maxal, Klizma qilish 2 maxal",
-  "note": "Istima chiqdi, ko'ngil ayish bo'ldi",
+  "patientId": "7ffe334d-7c50-47a1-95f9-5d1965eabc76",
+  "diseaseName": "Gaymarit",
+  "recordDate": "2025-09-20",
+  "doctorName": "Baxodiraka ",
+  "hospitalName": "City Hospital",
+  "treatment": "5 kun burun yuvish, tabletka ichish",
+  "note": "bosh ogrig'i, burundan suv kelishi kuzatildi",
   "isCritical": false,
   "photoIds": [
-    "1c77e7dc-b9ec-4cb4-96ca-fb7d2a3a92e0.png",
-    "3840ccda-bc6b-4a01-80ae-92485653da24.png",
-    "0b4ab2a2-5cdc-4b25-975c-1c34878f7558.png"
+    "5d3ca3d2-4536-4269-a6de-fc04ad167df6.jpg"
   ]
 }
 
