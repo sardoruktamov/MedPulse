@@ -6,6 +6,7 @@ import api.medpulse.uz.dto.HealthRecord.*;
 import api.medpulse.uz.entity.AttachEntity;
 import api.medpulse.uz.entity.HealthRecordEntity;
 import api.medpulse.uz.entity.PatientProfileEntity;
+import api.medpulse.uz.enums.ProfileRole;
 import api.medpulse.uz.exps.AppBadException;
 import api.medpulse.uz.repository.HealthRecordRepository;
 import api.medpulse.uz.repository.PatientProfileRepository;
@@ -35,6 +36,9 @@ public class HealthRecordService {
 
     @Autowired
     private AttachService attachService;
+
+    @Autowired
+    private AccessControlService accessControlService;
 
     public HealthRecordDTO create(HealthRecordCreateDTO dto) {
         // 1. Kim yozyapti? (Ota)
@@ -223,13 +227,30 @@ public class HealthRecordService {
     // Ro'yxatni olish
     public List<HealthRecordDTO> getMedicalHistory(String patientId) {
         Integer currentUserId = SpringSecurityUtil.getCurrentUserId();
-        // Xavfsizlik: Faqat o'z oilasini ko'ra olsin
-        boolean isOwner = patientProfileRepository.findByIdAndOwner_Id(patientId, currentUserId).isPresent();
-        if (!isOwner) throw new AppBadException("Ruxsat yo'q");
 
+        // 1. Avval "Bu user Bemorning egasimi?" deb tekshiramiz
+        boolean isOwner = patientProfileRepository.findByIdAndOwner_Id(patientId, currentUserId).isPresent();
+
+        // 2. MANTIQNI BIRLASHTIRAMIZ
+        if (isOwner) {
+            // A) Agar OTA bo'lsa -> HECH NARSA QILISH SHART EMAS, to'g'ri pastga tushib ketaveradi.
+            // (Chunki ota o'z bolasini doim ko'ra olishi kerak)
+        } else {
+            // B) Agar OTA BO'LMASA -> Demak bu begona odam yoki Doktor.
+
+            if (SpringSecurityUtil.hazRole(ProfileRole.ROLE_DOCTOR)) {
+                // Agar Doktor bo'lsa -> Ruxsatnomani tekshiramiz ("Qorovul")
+                accessControlService.checkDoctorAccess(patientId);
+                // Agar checkDoctorAccess exception otmasa, demak ruxsat bor va pastga o'tadi.
+            } else {
+                // C) Agar na Ota va na Doktor bo'lsa -> Begona shaxs.
+                throw new AppBadException("Ruxsat yo'q. Bu ma'lumot maxfiy.");
+            }
+        }
+
+        // 3. Ma'lumotni olib qaytaramiz
         List<HealthRecordEntity> list = healthRecordRepository.findByPatientIdOrderByRecordDateDesc(patientId);
 
-        // Stream orqali hammasini DTO ga aylantiramiz
         return list.stream()
                 .map(this::toDTO)
                 .toList();
