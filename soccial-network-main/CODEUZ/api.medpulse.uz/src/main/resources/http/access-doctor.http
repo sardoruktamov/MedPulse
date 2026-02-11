@@ -1,0 +1,104 @@
+### =================================================================
+### O'ZGARUVCHILAR (Environment Variables)
+### =================================================================
+
+# 1. OTA (Bemorning egasi - User)
+@parentEmail = 998911576777
+@parentPassword = 12345
+
+# 2. DOKTOR (Tizimdagi istalgan doktor)
+@doctorEmail = sardorbek.uktamov.1@mail.ru
+@doctorPassword = 12345
+
+# 3. BEMOR ID (Ota profiliga tegishli bo'lgan bemor UUID si)
+# ! DIQQAT: Bazadan "patient_profile" jadvalidan bitta ID olib shu yerga qo'ying:
+@patientId = 7ffe334d-7c50-47a1-95f9-5d1965eabc76
+
+### =================================================================
+### 1-QADAM: OTA (USER) TIZIMGA KIRADI
+### Maqsad: Token olish va keyingi so'rovlarda ishlatish
+### =================================================================
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "998911576777",
+  "password": "12345"
+}
+
+> {%
+    client.global.set("userToken", response.body.accessToken);
+    client.log("OTA TOKENI OLINDI: " + response.body.accessToken);
+%}
+
+###
+
+### =================================================================
+### 2-QADAM: DOKTOR TIZIMGA KIRADI
+### Maqsad: Token olish va keyingi so'rovlarda ishlatish
+### =================================================================
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "sardorbek.uktamov.1@mail.ru",
+  "password": "12345"
+}
+
+> {%
+    client.global.set("doctorToken", response.body.accessToken);
+    client.log("DOKTOR TOKENI OLINDI: " + response.body.accessToken);
+%}
+
+###
+
+### =================================================================
+### 3-QADAM: OTA O'Z FARZANDI UCHUN KOD OLADI (GENERATE)
+### Ssenariy: Ota ilovada "Shifokorga ko'rsatish" tugmasini bosdi.
+### =================================================================
+POST http://localhost:8080/api/v1/access/generate/7ffe334d-7c50-47a1-95f9-5d1965eabc76
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3NzA4MjcyNDQsImV4cCI6MTc3MDkxMzY0NH0.KjE7ZAElJis7Y5XtwQAu0ELUy9SEB9QLD8s8126S3nwVGT6L1HJW4BEiWMi6eswib2_Txvn4D8k-__5M-G1CcA
+
+> {%
+    // Server qaytargan 6 xonali kodni keyingi so'rov uchun saqlab olamiz
+    client.global.set("accessCode", response.body);
+    client.log("GENERATSIYA QILINGAN KOD: " + response.body);
+%}
+
+### KUTILAYOTGAN NATIJA (Body):
+# "84108" (yoki boshqa 6 xonali raqam)
+
+###
+
+### =================================================================
+### 4-QADAM: DOKTOR KODNI KIRITADI (VERIFY)
+### Ssenariy: Doktor o'z telefonida Otasi aytgan kodni teradi.
+### =================================================================
+POST http://localhost:8080/api/v1/access/doctor-verify?code=84108
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXJkb3JiZWsudWt0YW1vdi4xQG1haWwucnUiLCJyb2xlcyI6IlJPTEVfVVNFUixST0xFX0RPQ1RPUiIsImlkIjoiMTYiLCJpYXQiOjE3NzA4MjczNzMsImV4cCI6MTc3MDkxMzc3M30.Z2my6DM-YfrlmGKB_X57uIjH6PDws9CnbbEEJeDGYyHhY4a5V5hcu09LBPV1j7dRkR_HcLnC6aSu6IlQ2UaD7A
+
+### KUTILAYOTGAN NATIJA (Body):
+# Bemorning ID si qaytadi: "7ffe334d-7c50-47a1-95f9-5d1965eabc76"
+# (Shundan so'ng Frontend doktorni bemor sahifasiga yo'naltiradi)
+
+###
+
+### =================================================================
+### 5-QADAM: DOKTOR BEMOR TARIXINI KO'RADI (ACCESS GRANTED)
+### Endi ruxsat "doctor_patient_access" jadvaliga yozildi.
+### Doktor bemalol kira olishi kerak.
+### =================================================================
+GET http://localhost:8080/api/v1/health-record/list/7ffe334d-7c50-47a1-95f9-5d1965eabc76
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXJkb3JiZWsudWt0YW1vdi4xQG1haWwucnUiLCJyb2xlcyI6IlJPTEVfVVNFUixST0xFX0RPQ1RPUiIsImlkIjoiMTYiLCJpYXQiOjE3NzA4MjczNzMsImV4cCI6MTc3MDkxMzc3M30.Z2my6DM-YfrlmGKB_X57uIjH6PDws9CnbbEEJeDGYyHhY4a5V5hcu09LBPV1j7dRkR_HcLnC6aSu6IlQ2UaD7A
+
+### KUTILAYOTGAN NATIJA (JSON):
+# [
+#   {
+#     "id": 15,
+#     "diseaseName": "Grip",
+#     "doctorName": "Dr. Aliyev",
+#     "recordDate": "2026-02-10",
+#     "treatment": "Paracetamol...",
+#     "photos": [...]
+#   }
+# ]
