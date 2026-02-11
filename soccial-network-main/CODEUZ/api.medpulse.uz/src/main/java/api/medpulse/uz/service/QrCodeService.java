@@ -43,12 +43,9 @@ public class QrCodeService {
         // Masalan: https://medpulse.uz/q/XyZ123
         String shortUrl = String.format("%s/q/%s", baseUrl, patient.getQrToken());
 
-        // QR tarkibi: URL + Matn (Gibrid usul)
-        String qrContent = String.format("%s", shortUrl);
-
         try {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
-            BitMatrix bitMatrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE, width, height);
+            BitMatrix bitMatrix = qrCodeWriter.encode(shortUrl, BarcodeFormat.QR_CODE, width, height);
             ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
             MatrixToImageConfig config = new MatrixToImageConfig(0xFF000000, 0xFFFFFFFF);
             MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream, config);
