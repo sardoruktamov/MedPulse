@@ -25,4 +25,13 @@ public class SpringSecurityUtil {
         return authentication.getAuthorities().stream()
                 .anyMatch(pr -> pr.getAuthority().equals(role.name()));
     }
+
+    // foydalanuvchini agar 1 ta roli bolsa shuni olish
+//    public static String getCurrentUserRole() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication != null && authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
+//            return authentication.getAuthorities().iterator().next().getAuthority();
+//        }
+//        return null;
+//    }
 }
