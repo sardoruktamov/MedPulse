@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface ProfileRoleRepository extends CrudRepository<ProfileRoleEntity,Integer> {
 
+    // Foydalanuvchining barcha rollarini o'chirish (kerak bo'lib qolishi mumkin)
     @Transactional
     @Modifying
     void deleteByProfileId(Integer integer);
@@ -19,4 +20,13 @@ public interface ProfileRoleRepository extends CrudRepository<ProfileRoleEntity,
     List<ProfileRole> getAllRolesListByProfileId(Integer profileId);
 
     List<ProfileRoleEntity> findByProfileId(Integer profileId);
+
+    // Maqsad: Shu foydalanuvchida aynan shu rol bormi?
+    // SQL: SELECT count(*) > 0 FROM profile_role WHERE profile_id = ? AND roles = ?
+    boolean existsByProfileIdAndRoles(Integer profileId, ProfileRole role);
+
+    // SQL: DELETE FROM profile_role WHERE profile_id = ? AND roles = ?
+    @Transactional // O'chirish amali uchun shart!
+    @Modifying     // Baza o'zgarayotganini bildiradi
+    void deleteByProfileIdAndRoles(Integer profileId, ProfileRole roles);
 }

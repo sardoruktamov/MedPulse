@@ -28,7 +28,7 @@ public class DoctorApplicationController {
     // 2. Statusni o'zgartirish (Admin)
     // URL: /api/v1/doctor-apply/change-status/15?status=APPROVED
     @PutMapping("/change-status/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('SUPERADMIN')")
     @Operation(summary = "Admin only", description = "Arizani tasdiqlash yoki rad etish")
     public ResponseEntity<String> changeStatus(@PathVariable Long id,
                                                @RequestParam ApplicationStatus status,
@@ -38,6 +38,7 @@ public class DoctorApplicationController {
 
     // 3. Admin uchun batafsil ko'rish
     @GetMapping("/admin/{id}")
+    @PreAuthorize("hasRole('SUPERADMIN')")
     @Operation(summary = "Admin only", description = "Diplom va statuslar bilan to'liq ma'lumot")
     public ResponseEntity<DoctorFullDTO> getForAdmin(@PathVariable Long id) {
         return ResponseEntity.ok(doctorDetailsService.getForAdmin(id));
