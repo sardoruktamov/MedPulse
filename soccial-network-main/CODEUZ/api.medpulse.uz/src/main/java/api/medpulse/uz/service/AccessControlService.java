@@ -52,7 +52,7 @@ public class AccessControlService {
         }
 
         // 2. 6 xonali kod yaratamiz
-        String code = RandomUtil.getRandomSmsCode(); // 6 xonali (M: 582104)
+        String code = RandomUtil.getRandomAccessCode(); // 4 xonali (M: 5104)
 
         // 3. Xotiraga saqlaymiz (2 daqiqa yashaydi)
         tempCodeStorage.put(code, new AccessCodeInfo(patientId, LocalDateTime.now().plusMinutes(2)));
@@ -83,8 +83,8 @@ public class AccessControlService {
         DoctorPatientAccessEntity access = new DoctorPatientAccessEntity();
         access.setDoctorId(Long.valueOf(doctorId));
         access.setPatientId(info.patientId);
-        // Ruxsat 1 soat davomida amal qiladi
-        access.setExpireDate(LocalDateTime.now().plusHours(1));
+        // Ruxsat 6 soat davomida amal qiladi
+        access.setExpireDate(LocalDateTime.now().plusHours(6));
 
         accessRepository.save(access);
 
