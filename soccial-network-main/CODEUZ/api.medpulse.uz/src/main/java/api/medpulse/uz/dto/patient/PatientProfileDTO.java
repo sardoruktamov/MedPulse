@@ -22,6 +22,10 @@ public class PatientProfileDTO {
     private Double height;
     private String workingBloodPressure;
 
+    private Integer regionId;   // Frontenddan ID keladi (masalan: 12)
+    private Integer districtId; // Frontenddan ID keladi (masalan: 184)
+    private String address;     // "Islom Karimov ko'chasi 5-uy"
+
     private String allergies;            // Allergiya haqida matn
     private String emergencyContactName; // Yaqin insonining ismi/qarindoshligi
     private String emergencyContactPhone;// Yaqin insonining telefoni

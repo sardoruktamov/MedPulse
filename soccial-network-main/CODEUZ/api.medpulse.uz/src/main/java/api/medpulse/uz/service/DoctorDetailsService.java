@@ -138,13 +138,15 @@ public class DoctorDetailsService {
      * 2. STATUS O'ZGARTIRISH (Admin)
      * Bu metodda ROLE o'zgaradi!
      */
-    /**
-     * 2. STATUS O'ZGARTIRISH (Admin)
-     */
     public String changeStatus(Long doctorDetailsId, ApplicationStatus newStatus, String reason) {
         // 1. Arizani topamiz (Faqat bir marta e'lon qilamiz)
         DoctorDetailsEntity entity = doctorDetailsRepository.findById(doctorDetailsId)
                 .orElseThrow(() -> new AppBadException("Ariza topilmadi"));
+
+        // 2. Statusni tekshiramiz
+        if (entity.getStatus().equals(ApplicationStatus.APPROVED) && newStatus.equals(ApplicationStatus.APPROVED)) {
+            return "Bu ariza allaqachon tasdiqlangan.";
+        }
 
         if (newStatus.equals(ApplicationStatus.REJECTED)) {
             // --- RAD ETISH ---
@@ -157,9 +159,7 @@ public class DoctorDetailsService {
         else if (newStatus.equals(ApplicationStatus.APPROVED)) {
             // --- TASDIQLASH ---
             entity.setStatus(ApplicationStatus.APPROVED);
-            entity.setRejectionReason(null);
-
-            // 🔥 ROLNI QO'SHISH (Agar yo'q bo'lsa) 🔥
+            entity.setRejectionReason(null); // Agar oldin rad etilgan bo'lsa, sababni o'chiramiz
 
             // 1. Profil ID sini olamiz
             Integer profileId = entity.getProfile().getId();
@@ -167,20 +167,19 @@ public class DoctorDetailsService {
             // 2. Hozirgi rollarni tekshiramiz (Repositorydagi query orqali)
             List<ProfileRole> currentRoles = profileRoleRepository.getAllRolesListByProfileId(profileId);
 
-            boolean isAlreadyDoctor = currentRoles.contains(ProfileRole.ROLE_DOCTOR);
-
-            if (!isAlreadyDoctor) {
+            // Agar unda hali ROLE_DOCTOR yo'q bo'lsa, qo'shamiz
+            if (!currentRoles.contains(ProfileRole.ROLE_DOCTOR)) {
                 ProfileRoleEntity newRoleEntity = new ProfileRoleEntity();
-
-                // DIQQAT: Sizning Entityda 'profile' insertable=false,
-                // shuning uchun to'g'ridan-to'g'ri ID ustuniga set qilamiz.
                 newRoleEntity.setProfileId(profileId);
-
                 newRoleEntity.setRoles(ProfileRole.ROLE_DOCTOR);
                 newRoleEntity.setCreatedDate(LocalDateTime.now());
 
                 profileRoleRepository.save(newRoleEntity);
+                log.info("SUPERADMIN tomonidan User NAME={} ga DOCTOR roli berildi, ID={}", entity.getProfile().getName(), profileId);
             }
+        }else {
+            // PENDING holatiga qaytarish (agar kerak bo'lsa)
+            entity.setStatus(ApplicationStatus.PENDING);
         }
 
         // DoctorDetails ni saqlash (Update)

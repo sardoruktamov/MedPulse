@@ -4,13 +4,12 @@ import api.medpulse.uz.dto.patient.PatientCreateDTO;
 import api.medpulse.uz.dto.patient.PatientProfileDTO;
 import api.medpulse.uz.dto.patient.PatientUpdateDTO;
 import api.medpulse.uz.dto.post.PostDTO;
-import api.medpulse.uz.entity.AttachEntity;
-import api.medpulse.uz.entity.PatientProfileEntity;
-import api.medpulse.uz.entity.PostEntity;
-import api.medpulse.uz.entity.ProfileEntity;
+import api.medpulse.uz.entity.*;
 import api.medpulse.uz.exps.AppBadException;
+import api.medpulse.uz.repository.DistrictRepository;
 import api.medpulse.uz.repository.PatientProfileRepository;
 import api.medpulse.uz.repository.ProfileRepository;
+import api.medpulse.uz.repository.RegionRepository;
 import api.medpulse.uz.util.RandomUtil;
 import api.medpulse.uz.util.SpringSecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +32,11 @@ public class PatientProfileService {
     private PatientProfileRepository patientProfileRepository;
     @Autowired
     private AttachService attachService;
+
+    @Autowired
+    private RegionRepository regionRepository;
+    @Autowired
+    private DistrictRepository districtRepository;
 
     // Profilni yangilash
     public PatientProfileDTO update(String profileId, PatientUpdateDTO dto) {
@@ -83,6 +87,30 @@ public class PatientProfileService {
             // Telefon raqamni formatlash yoki tozalash kerak bo'lsa shu yerda qilinadi
             entity.setEmergencyContactPhone(dto.getEmergencyContactPhone());
         }
+
+        entity.setAddress(dto.getAddress()); // Ko'cha nomi
+
+        // 4. VILOYATNI YANGILASH (Agar ID kelgan bo'lsa)
+        if (dto.getRegionId() != null) {
+            RegionEntity region = regionRepository.findById(dto.getRegionId())
+                    .orElseThrow(() -> new AppBadException("Viloyat topilmadi"));
+            entity.setRegion(region);
+        }
+
+        // 5. TUMANNI YANGILASH (Agar ID kelgan bo'lsa)
+        if (dto.getDistrictId() != null) {
+            DistrictEntity district = districtRepository.findById(dto.getDistrictId())
+                    .orElseThrow(() -> new AppBadException("Tuman topilmadi"));
+
+            // Tekshiruv: Tanlangan tuman haqiqatan ham shu viloyatdami?
+            // Bu ma'lumotlar butunligi uchun kerak
+            if (dto.getRegionId() != null && !district.getRegion().getId().equals(dto.getRegionId())) {
+                throw new AppBadException("Tanlangan tuman bu viloyatga tegishli emas!");
+            }
+
+            entity.setDistrict(district);
+        }
+
         // 4. Saqlash
         patientProfileRepository.save(entity);
         // 2. Agar rasm o'zgargan bo'lsa, eski rasmni AttachService orqali o'chiramiz
@@ -166,6 +194,11 @@ public class PatientProfileService {
         dto.setBloodGroup(entity.getBloodGroup());
         dto.setWeight(entity.getWeight());
         dto.setHeight(entity.getHeight());
+
+        dto.setRegionId(entity.getRegion().getId());
+        dto.setDistrictId(entity.getDistrict().getId());
+        dto.setAddress(entity.getAddress());
+
         dto.setAllergies(entity.getAllergies());
         dto.setEmergencyContactName(entity.getEmergencyContactName());
         dto.setEmergencyContactPhone(entity.getEmergencyContactPhone());

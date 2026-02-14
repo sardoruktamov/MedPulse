@@ -43,6 +43,21 @@ public class PatientProfileEntity {
     @Column(name = "allergies", columnDefinition = "TEXT")
     private String allergies; // Masalan: "Penitsillin, Chang, Tutun"
 
+    // 1. VILOYAT (ManyToOne)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id")
+    private RegionEntity region;
+
+    // 2. TUMAN (ManyToOne)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "district_id")
+    private DistrictEntity district;
+
+    // 3. KO'CHA VA UY (Oddiy matn)
+    // Masalan: "A.Temur ko'chasi, 15-uy, 4-xonadon"
+    @Column(name = "address", columnDefinition = "TEXT")
+    private String address;
+
     @Column(name = "emergency_contact_name")
     private String emergencyContactName; // Kimligi (Masalan: Otasi - Eshmatov Toshmat)
 
