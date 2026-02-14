@@ -10,6 +10,11 @@ public class RandomUtil {
         return String.valueOf(random.nextInt(10000,99999));
     }
 
+    // Access doctor
+    public static String getRandomAccessCode() {
+        return String.valueOf(random.nextInt(1000,9999));
+    }
+
     // 6 xonali Short ID generatsiya qilish
     public static String generateQrToken() {
         StringBuilder sb = new StringBuilder(6);
