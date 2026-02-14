@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SpringConfig {
     @Autowired
     private UserDetailsService userDetailsService;
@@ -64,6 +66,9 @@ public class SpringConfig {
         http.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
             authorizationManagerRequestMatcherRegistry
                     .requestMatchers(AUTH_WHITELIST).permitAll() //AUTH_WHITELIST ni o'rnida "/auth/**" bolishi mumkin edi
+                    .requestMatchers("/api/v1/admin/**").hasRole("SUPERADMIN") // /api/v1/admin/** bilan boshlanadigan BARCHA so'rovlar faqat SUPER_ADMIN uchun
+                    .requestMatchers("/api/v1/doctor-application/list").hasRole("SUPERADMIN")
+                    .requestMatchers("/api/v1/doctor-application/change-status/**").hasRole("SUPERADMIN")
                     .requestMatchers(HttpMethod.GET,"/api/v1/posts/public/*").permitAll()
                     .requestMatchers("/api/v1/access/**").authenticated()
                     .requestMatchers("/api/v1/patient/**").authenticated() // Login qilgan hamma kira olsin
