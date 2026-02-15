@@ -30,6 +30,12 @@ public class SpringConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    // 1. Yangi Handlerlarni inject qilamiz
+    @Autowired
+    private CustomAccessDeniedHandler accessDeniedHandler;
+    @Autowired
+    private CustomAuthenticationEntryPoint authenticationEntryPoint;
+
     // barcha uchun ochiq bo'lgan URLlarga tokenni tekshirmasdan murojaat
     // qilishlari uchun array yaratilindi, ya`ni doFilterInternal methodiga murojaat qilmasligi uchun.
     public static final String[] AUTH_WHITELIST = {
@@ -79,6 +85,11 @@ public class SpringConfig {
         }).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.csrf(AbstractHttpConfigurer::disable); // csrf uchirilgan
+        // Xatolarni bizning klasslar orqali qaytarishni aytamiz
+        http.exceptionHandling(exception -> {
+            exception.accessDeniedHandler(accessDeniedHandler);        // 403 uchun
+            exception.authenticationEntryPoint(authenticationEntryPoint); // 401 uchun
+        });
 
         //cors-saytlararo murojaat, ya`ni boshqa saytdan murojaat qilishni sozlash
         http.cors(httpSecurityCorsConfigurer -> {
