@@ -7,6 +7,7 @@ import api.medpulse.uz.entity.PatientProfileEntity;
 import api.medpulse.uz.repository.PatientProfileRepository;
 import api.medpulse.uz.service.PatientProfileService;
 import api.medpulse.uz.service.QrCodeService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,12 @@ public class PatientProfileController {
     @GetMapping("/my-profiles")
     public ResponseEntity<List<PatientProfileDTO>> getMyProfiles() {
         return ResponseEntity.ok(patientProfileService.getMyFamilyProfiles());
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Get One", description = "Bemor profilini ID orqali olish")
+    public ResponseEntity<PatientProfileDTO> getById(@PathVariable String id) {
+        return ResponseEntity.ok(patientProfileService.getById(id));
     }
 
     // 2. Profilni to'ldirish (Update)

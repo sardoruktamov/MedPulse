@@ -5,6 +5,7 @@ import api.medpulse.uz.dto.patient.PatientProfileDTO;
 import api.medpulse.uz.dto.patient.PatientUpdateDTO;
 import api.medpulse.uz.dto.post.PostDTO;
 import api.medpulse.uz.entity.*;
+import api.medpulse.uz.enums.ProfileRole;
 import api.medpulse.uz.exps.AppBadException;
 import api.medpulse.uz.repository.DistrictRepository;
 import api.medpulse.uz.repository.PatientProfileRepository;
@@ -37,7 +38,8 @@ public class PatientProfileService {
     private RegionRepository regionRepository;
     @Autowired
     private DistrictRepository districtRepository;
-
+    @Autowired
+    private AccessControlService accessControlService;
     // Profilni yangilash
     public PatientProfileDTO update(String profileId, PatientUpdateDTO dto) {
         // 1. Hozirgi kirgan foydalanuvchi (Ota) ID sini olamiz
@@ -178,6 +180,35 @@ public class PatientProfileService {
                 .toList();
     }
 
+    public PatientProfileDTO getById(String id) {
+        // 1. Bemorni bazadan qidiramiz
+        PatientProfileEntity entity = patientProfileRepository.findById(id)
+                .orElseThrow(() -> new AppBadException("Bemor topilmadi"));
+
+        Integer currentUserId = SpringSecurityUtil.getCurrentUserId();
+
+        // 2. TEKSHIRUV: So'rov qilayotgan odam shu bemorning OTASI (Owner) ekanligini tekshiramiz
+        boolean isOwner = entity.getOwner().getId().equals(currentUserId);
+
+        // 3. MANTIQ:
+        if (isOwner) {
+            // A) Agar OTA bo'lsa -> To'siqsiz ruxsat
+            return toDTO(entity);
+        }
+        else if (SpringSecurityUtil.hazRole(ProfileRole.ROLE_DOCTOR)) {
+            // B) Agar DOKTOR bo'lsa -> Ruxsatnomasi (Access) borligini tekshiramiz
+            // Agar ruxsati bo'lmasa, checkDoctorAccess() metodi Exception otadi va kod shu yerda to'xtaydi.
+            accessControlService.checkDoctorAccess(id);
+
+            // Agar exception otmasa, demak ruxsat bor
+            return toDTO(entity);
+        }
+
+        // 4. Agar Ota ham, Ruxsatli Doktor ham bo'lmasa (Admin, SuperAdmin, Begona User)
+        // Qat'iy rad etamiz!
+        throw new AppBadException("Sizda bu bemor ma'lumotlarini ko'rishga ruxsat yo'q!");
+    }
+    
     // 1. Convert Metodi (Yordamchi metod)
     public PatientProfileDTO toDTO(PatientProfileEntity entity) {
         PatientProfileDTO dto = new PatientProfileDTO();
@@ -205,4 +236,6 @@ public class PatientProfileService {
         dto.setWorkingBloodPressure(entity.getWorkingBloodPressure());
         return dto;
     }
+
+
 }

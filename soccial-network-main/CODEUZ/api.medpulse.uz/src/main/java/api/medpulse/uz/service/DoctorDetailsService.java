@@ -8,6 +8,7 @@ import api.medpulse.uz.entity.AttachEntity;
 import api.medpulse.uz.entity.DoctorDetailsEntity;
 import api.medpulse.uz.entity.ProfileEntity;
 import api.medpulse.uz.entity.ProfileRoleEntity;
+import api.medpulse.uz.enums.ActionType;
 import api.medpulse.uz.enums.ApplicationStatus;
 import api.medpulse.uz.enums.ProfileRole;
 import api.medpulse.uz.exps.AppBadException;
@@ -40,6 +41,9 @@ public class DoctorDetailsService {
     private ProfileRoleRepository profileRoleRepository;
     @Autowired
     private AttachService attachService;
+
+    @Autowired
+    private LogService logService;
 
     /**
      * 1. ARIZA TOPSHIRISH (User application to become a doctor)
@@ -148,14 +152,18 @@ public class DoctorDetailsService {
             return "Bu ariza allaqachon tasdiqlangan.";
         }
 
+        String logDescription = ""; // Log uchun izoh tayyorlaymiz
+        ActionType actionType = null;
+
         if (newStatus.equals(ApplicationStatus.REJECTED)) {
             // --- RAD ETISH ---
-            if (reason == null || reason.trim().isEmpty()) {
-                throw new AppBadException("Rad etish sababi yozilishi shart!");
+            if (reason == null || reason.trim().length() < 8) {
+                throw new AppBadException("Rad etish sababi kamida 8 ta belgidan iborat bo'lishi shart!");
             }
             entity.setStatus(ApplicationStatus.REJECTED);
             entity.setRejectionReason(reason);
         }
+
         else if (newStatus.equals(ApplicationStatus.APPROVED)) {
             // --- TASDIQLASH ---
             entity.setStatus(ApplicationStatus.APPROVED);
@@ -177,6 +185,10 @@ public class DoctorDetailsService {
                 profileRoleRepository.save(newRoleEntity);
                 log.info("SUPERADMIN tomonidan User NAME={} ga DOCTOR roli berildi, ID={}", entity.getProfile().getName(), profileId);
             }
+            // Log uchun ma'lumot
+            actionType = ActionType.APPROVE_DOCTOR;
+            // Sabab majburiy bo'lmagani uchun o'zimiz generatsiya qilamiz
+            logDescription = reason != null && reason.length() > 8 ? reason : "Hujjatlar tekshirildi va tasdiqlandi.";
         }else {
             // PENDING holatiga qaytarish (agar kerak bo'lsa)
             entity.setStatus(ApplicationStatus.PENDING);
@@ -184,6 +196,15 @@ public class DoctorDetailsService {
 
         // DoctorDetails ni saqlash (Update)
         doctorDetailsRepository.save(entity);
+
+        // 4. 🔥 LOG YOZISH (Jarayon oxirida) 🔥
+        if (actionType != null) {
+            // objectId sifatida Doktorning PROFIL ID sini beramiz
+            logService.create(actionType,
+                    entity.getProfile().getId().toString(),
+                    logDescription
+             );
+        }
 
         return "Status o'zgartirildi: " + newStatus;
     }
