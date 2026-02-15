@@ -27,7 +27,7 @@ Content-Type: image/jpeg
 # ---------------------------------------------------------
 POST http://localhost:8080/api/v1/doctor-apply
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXJkb3JiZWsudWt0YW1vdi4xQG1haWwucnUiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMTYiLCJpYXQiOjE3Njk3NjY1MTEsImV4cCI6MTc2OTg1MjkxMX0.et-h0nzKeeJ9WEXuQvbUqXQ26iZnLlQehF8m_oBV2euDlIi_8WVWvQmm-YuCfEySg8wqXDrgO4Dge7H4TKcTqw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXJkb3JiZWsudWt0YW1vdi4xQG1haWwucnUiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMTYiLCJpYXQiOjE3NzEwODM2MTAsImV4cCI6MTc3MTE3MDAxMH0.0HGGe-P-LLc7ghY28N6iLct75lw77rZoX9dXvg-rTCHTWlvOZUAY2NfP9rUqxNu-vkAqLLQWFXsaNkIMVG7rLg
 
 {
   "speciality": "Kardiolog",
@@ -57,7 +57,7 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXJkb3JiZWsudWt0YW1vdi4xQ
 # ---------------------------------------------------------
 PUT http://localhost:8080/api/v1/doctor-apply/change-status/1?status=APPROVED
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTY5OTI0NywiZXhwIjoxNzY5Nzg1NjQ3fQ.Zv8hFh6OMj714P8WBNTQi5S5heVbt9hKqtVTwPFpdoxg1-k4_nYPl5InOjSJxdu4foFcKKHRjogha7uHoumJXw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3NzEwNjk1MzAsImV4cCI6MTc3MTE1NTkzMH0.MVeXDpYm9xpJulGSveomotA2Rz5hDb2xh607mK8Otso0G4WrU_LN5jr_yh0OzKY2nw8dtrKnIFDEpup0pPppVQ
 
 ###
 
@@ -91,12 +91,22 @@ GET http://localhost:8080/api/v1/doctor-apply/1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXJkb3JiZWsudWt0YW1vdi4xQG1haWwucnUiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMTYiLCJpYXQiOjE3Njk3NjY1MTEsImV4cCI6MTc2OTg1MjkxMX0.et-h0nzKeeJ9WEXuQvbUqXQ26iZnLlQehF8m_oBV2euDlIi_8WVWvQmm-YuCfEySg8wqXDrgO4Dge7H4TKcTqw
 
-### Login
+### Login SUER-ADMIN
 POST localhost:8080/api/v1/auth/login
 Content-Type: application/json
 Accept-Language: UZ
 
 {
   "username": "998911576777",
+  "password": "12345"
+}
+
+### Login DOCTOR
+POST localhost:8080/api/v1/auth/login
+Content-Type: application/json
+Accept-Language: UZ
+
+{
+  "username": "sardorbek.uktamov.1@mail.ru",
   "password": "12345"
 }

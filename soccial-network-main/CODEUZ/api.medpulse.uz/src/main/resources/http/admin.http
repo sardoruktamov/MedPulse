@@ -1,0 +1,38 @@
+### =================================================================
+### 1-QADAM: SUPER ADMIN TIZIMGA KIRADI
+### Maqsad: Token olish. Chunki keyingi amallarni faqat u qila oladi.
+### =================================================================
+POST localhost:8080/api/v1/auth/login
+Content-Type: application/json
+Accept-Language: UZ
+
+{
+  "username": "998911576777",
+  "password": "12345"
+}
+
+### =================================================================
+### 2-QADAM: USERGA ADMIN HUQUQINI BERISH
+### Ssenariy: SuperAdmin bir xodimni ishga oldi va unga Admin panelni ochib beryapti.
+### =================================================================
+POST http://localhost:8080/api/v1/admin/change-role/to-admin/14
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3NzEwNjk1MzAsImV4cCI6MTc3MTE1NTkzMH0.MVeXDpYm9xpJulGSveomotA2Rz5hDb2xh607mK8Otso0G4WrU_LN5jr_yh0OzKY2nw8dtrKnIFDEpup0pPppVQ
+Content-Type: application/json
+
+### KUTILAYOTGAN NATIJA:
+# 200 OK: "Muvaffaqiyatli! Foydalanuvchi endi tizim administratori."
+# Bazada: "profile_role" jadvaliga yangi qator qo'shiladi (ROLE_ADMIN).
+
+###
+
+### =================================================================
+### 3-QADAM: ADMIN HUQUQINI OLIB TASHLASH
+### Ssenariy: Xodim ishdan bo'shadi yoki xato qildi. Uni oddiy userga qaytaramiz.
+### =================================================================
+POST http://localhost:8080/api/v1/admin/change-role/remove-admin/14
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXJkb3JiZWsudWt0YW1vdi4xQG1haWwucnUiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMTYiLCJpYXQiOjE3NzEwODM2MTAsImV4cCI6MTc3MTE3MDAxMH0.0HGGe-P-LLc7ghY28N6iLct75lw77rZoX9dXvg-rTCHTWlvOZUAY2NfP9rUqxNu-vkAqLLQWFXsaNkIMVG7rLg
+Content-Type: application/json
+
+### KUTILAYOTGAN NATIJA:
+# 200 OK: "Muvaffaqiyatli! Admin huquqi bekor qilindi..."
+# Bazada: "profile_role" jadvalidan ROLE_ADMIN qatori o'chib ketadi.

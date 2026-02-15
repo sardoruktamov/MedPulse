@@ -1,20 +1,4 @@
 ### =================================================================
-### O'ZGARUVCHILAR (Environment Variables)
-### =================================================================
-
-# 1. OTA (Bemorning egasi - User)
-@parentEmail = 998911576777
-@parentPassword = 12345
-
-# 2. DOKTOR (Tizimdagi istalgan doktor)
-@doctorEmail = sardorbek.uktamov.1@mail.ru
-@doctorPassword = 12345
-
-# 3. BEMOR ID (Ota profiliga tegishli bo'lgan bemor UUID si)
-# ! DIQQAT: Bazadan "patient_profile" jadvalidan bitta ID olib shu yerga qo'ying:
-@patientId = 7ffe334d-7c50-47a1-95f9-5d1965eabc76
-
-### =================================================================
 ### 1-QADAM: OTA (USER) TIZIMGA KIRADI
 ### Maqsad: Token olish va keyingi so'rovlarda ishlatish
 ### =================================================================

@@ -9,20 +9,25 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlc
 ### Ota o'zi yoki oila azosining patientProfileEntty qismini tahrirlash
 PUT http://localhost:8080/api/v1/patient/7ffe334d-7c50-47a1-95f9-5d1965eabc76
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3NzAxMzgwMTgsImV4cCI6MTc3MDIyNDQxOH0.5_C0HyBm7dp91o0R4g0aUrrcQ4pYek1lcpG3xfm5o2N-yvi7sQKjkQhE18O1b1byyDfJEa33TUtnBYj6z0N6ng
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3NzEwNjk1MzAsImV4cCI6MTc3MTE1NTkzMH0.MVeXDpYm9xpJulGSveomotA2Rz5hDb2xh607mK8Otso0G4WrU_LN5jr_yh0OzKY2nw8dtrKnIFDEpup0pPppVQ
 
 {
-  "fullName": "Zoxidaxon Farxodjonova",
-  "birthDate": "2022-09-26",
-  "photoId": "b6dc146c-0cd2-4b07-b8e5-4adfc4b7480f.jpg",
-  "allergies": "chang va tutunga, Paratsetamol",
-  "gender": "FEMALE",
-  "bloodGroup": "A_POSITIVE",
-  "weight": 12.5,
-  "height": 95.0,
-  "workingBloodPressure": "120/80",
-  "emergencyContactPhone": "998905846866"
+  "regionId": 12,
+  "districtId": 179,
+  "address": "Bog'iston MFY,Posbonlar k. 8-uy"
 }
+###{
+#  "fullName": "Zoxidaxon Farxodjonova",
+#  "birthDate": "2022-09-26",
+#  "photoId": "b6dc146c-0cd2-4b07-b8e5-4adfc4b7480f.jpg",
+#  "allergies": "chang va tutunga, Paratsetamol",
+#  "gender": "FEMALE",
+#  "bloodGroup": "A_POSITIVE",
+#  "weight": 12.5,
+#  "height": 95.0,
+#  "workingBloodPressure": "120/80",
+#  "emergencyContactPhone": "998905846866"
+#}
 
 ### Oila a'zosini qo'shish (Farzand yoki boshqa)
 POST http://localhost:8080/api/v1/patient/family
