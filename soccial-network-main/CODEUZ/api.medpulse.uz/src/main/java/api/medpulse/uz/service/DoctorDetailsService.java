@@ -200,7 +200,7 @@ public class DoctorDetailsService {
         // 4. 🔥 LOG YOZISH (Jarayon oxirida) 🔥
         if (actionType != null) {
             // objectId sifatida Doktorning PROFIL ID sini beramiz
-            logService.create(actionType,
+            logService.createAdminLog(actionType,
                     entity.getProfile().getId().toString(),
                     logDescription
              );

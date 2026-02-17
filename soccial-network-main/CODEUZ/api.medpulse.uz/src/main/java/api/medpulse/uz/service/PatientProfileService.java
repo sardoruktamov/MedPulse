@@ -208,7 +208,7 @@ public class PatientProfileService {
         // Qat'iy rad etamiz!
         throw new AppBadException("Sizda bu bemor ma'lumotlarini ko'rishga ruxsat yo'q!");
     }
-    
+
     // 1. Convert Metodi (Yordamchi metod)
     public PatientProfileDTO toDTO(PatientProfileEntity entity) {
         PatientProfileDTO dto = new PatientProfileDTO();

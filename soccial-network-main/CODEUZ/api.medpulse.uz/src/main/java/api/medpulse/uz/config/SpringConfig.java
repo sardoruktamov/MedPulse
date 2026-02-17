@@ -1,5 +1,6 @@
 package api.medpulse.uz.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,18 +24,16 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SpringConfig {
-    @Autowired
-    private UserDetailsService userDetailsService;
 
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final UserDetailsService userDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     // 1. Yangi Handlerlarni inject qilamiz
-    @Autowired
-    private CustomAccessDeniedHandler accessDeniedHandler;
-    @Autowired
-    private CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final IpBlockFilter ipBlockFilter;
 
     // barcha uchun ochiq bo'lgan URLlarga tokenni tekshirmasdan murojaat
     // qilishlari uchun array yaratilindi, ya`ni doFilterInternal methodiga murojaat qilmasligi uchun.
@@ -69,6 +68,11 @@ public class SpringConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // authorization - Foydalanuvchining tizimdagi huquqlarini tekshirish.
         // Ya'ni foydalanuvchi murojaat qilayotgan API-larni ishlatishga ruxsati bor yoki yo'qligini tekshirishdir.
+
+        // 1-O'RINDA: IP BLOCK FILTER (Darvozabon)
+        // Bu eng birinchi turishi shart! Hatto login qilishga urinishdan oldin tekshiradi.
+        http.addFilterBefore(ipBlockFilter, UsernamePasswordAuthenticationFilter.class);
+
         http.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
             authorizationManagerRequestMatcherRegistry
                     .requestMatchers(AUTH_WHITELIST).permitAll() //AUTH_WHITELIST ni o'rnida "/auth/**" bolishi mumkin edi
