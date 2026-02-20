@@ -4,10 +4,7 @@ import api.medpulse.uz.dto.AttachDTO;
 import api.medpulse.uz.dto.doctor.DoctorApplyDTO;
 import api.medpulse.uz.dto.doctor.DoctorFullDTO; // Buni o'zingiz yaratasiz (fieldlarni Mapping qilish uchun)
 import api.medpulse.uz.dto.doctor.DoctorPublicDTO;
-import api.medpulse.uz.entity.AttachEntity;
-import api.medpulse.uz.entity.DoctorDetailsEntity;
-import api.medpulse.uz.entity.ProfileEntity;
-import api.medpulse.uz.entity.ProfileRoleEntity;
+import api.medpulse.uz.entity.*;
 import api.medpulse.uz.enums.ActionType;
 import api.medpulse.uz.enums.ApplicationStatus;
 import api.medpulse.uz.enums.ProfileRole;
@@ -15,6 +12,7 @@ import api.medpulse.uz.exps.AppBadException;
 import api.medpulse.uz.repository.DoctorDetailsRepository;
 import api.medpulse.uz.repository.ProfileRepository;
 import api.medpulse.uz.repository.ProfileRoleRepository;
+import api.medpulse.uz.repository.UniversityRepository;
 import api.medpulse.uz.service.AttachService;
 import api.medpulse.uz.util.SpringSecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +42,9 @@ public class DoctorDetailsService {
 
     @Autowired
     private LogService logService;
+
+    @Autowired
+    private UniversityRepository universityRepository;
 
     /**
      * 1. ARIZA TOPSHIRISH (User application to become a doctor)
@@ -84,7 +85,12 @@ public class DoctorDetailsService {
 
         // 3. Ma'lumotlarni to'ldirish (Mapping)
         entity.setSpeciality(dto.getSpeciality());
-        entity.setUniversityName(dto.getUniversityName());
+        // ---OTM NI ID ORQALI TOPISH VA SET QILISH ---
+        UniversityEntity university = universityRepository.findById(dto.getUniversityId())
+                .orElseThrow(() -> new AppBadException("Tanlangan OTM bazada topilmadi"));
+
+        entity.setUniversity(university);
+        // ---------------------------------------------------
         entity.setDegree(dto.getDegree());
         entity.setGraduatedDate(dto.getGraduatedDate());
         entity.setExperienceYear(dto.getExperienceYear());
@@ -225,7 +231,7 @@ public class DoctorDetailsService {
             dto.setAvatar(attachService.attachDTO(entity.getProfile().getPhotoId()));
         }
         dto.setSpeciality(entity.getSpeciality());
-        dto.setUniversityName(entity.getUniversityName());
+        dto.setUniversityName(entity.getUniversity().getName());
         dto.setDegree(entity.getDegree());
         dto.setCurrentWorkplace(entity.getCurrentWorkplace());
         dto.setStatus(entity.getStatus());
@@ -265,7 +271,7 @@ public class DoctorDetailsService {
         }
 
         dto.setSpeciality(entity.getSpeciality());
-        dto.setUniversityName(entity.getUniversityName());
+        dto.setUniversityName(entity.getUniversity().getName());
         dto.setDegree(entity.getDegree());
         dto.setCurrentWorkplace(entity.getCurrentWorkplace());
         dto.setExperienceYear(entity.getExperienceYear());

@@ -17,8 +17,8 @@ public class DoctorApplyDTO {
     @NotBlank(message = "Mutaxassislik bo'sh bo'lmasligi kerak")
     private String speciality;
 
-    @NotBlank(message = "OTM nomi bo'sh bo'lmasligi kerak")
-    private String universityName;
+    @NotNull(message = "OTM tanlanishi shart")
+    private Integer universityId;
 
     @NotNull(message = "Daraja tanlanishi kerak")
     private DoctorDegree degree;

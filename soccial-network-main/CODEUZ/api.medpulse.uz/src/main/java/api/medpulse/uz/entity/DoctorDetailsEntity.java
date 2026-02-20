@@ -30,8 +30,9 @@ public class DoctorDetailsEntity {
     @Column(nullable = false)
     private String speciality; // M: Kardiolog
 
-    @Column(name = "university_name")
-    private String universityName; // M: Toshkent Tibbiyot Akademiyasi
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "university_id")
+    private UniversityEntity university; // M: Toshkent Tibbiyot Akademiyasi
 
     @Enumerated(EnumType.STRING)
     @Column(name = "degree")
