@@ -1,0 +1,15 @@
+### =======================================================
+### 1. RUXSATSIZ KIRISHGA URINISH (403 TRIGGER)
+### Maqsad: Oddiy User tokeni bilan SuperAdmin API siga kirish
+### =======================================================
+
+# 1-QADAM: Oddiy User (masalan Bemor) tokenini oling
+@userToken = eyJhbGciOiJIUzUxMiJ9... (BU YERGA ODDIY USER TOKENINI QO'YING)
+
+### 2-QADAM: SuperAdminga tegishli joyga "buzib" kirishga urinamiz
+GET http://localhost:8080/api/v1/admin-logs
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXJkb3JiZWsudWt0YW1vdi4xQG1haWwucnUiLCJyb2xlcyI6IlJPTEVfVVNFUixST0xFX0RPQ1RPUiIsImlkIjoiMTYiLCJpYXQiOjE3NzE2MDE0NTYsImV4cCI6MTc3MTY4Nzg1Nn0.2kTm3KfQuL93jfWguxuERuqZKv8qKIU3BDwfQ3VeErjLqnOIut9E6emn1B6ntb4o7vCsIST4yG2wB2uxGqUTaw
+
+### KUTILAYOTGAN NATIJA:
+# 1. Frontend "403 Sizda ruxsat yo'q" xatosini oladi.
+# 2. Bazada "security_log" jadvalida yangi qator paydo bo'ladi (IP, UserAgent va h.k).

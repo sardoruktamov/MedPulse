@@ -1,5 +1,5 @@
 ### =================================================================
-### 1-QADAM: OTA (USER) TIZIMGA KIRADI
+### 1-QADAM: OTA (USER) TIZIMGA KIRADI -SUPERADMIN
 ### Maqsad: Token olish va keyingi so'rovlarda ishlatish
 ### =================================================================
 POST http://localhost:8080/api/v1/auth/login
@@ -10,12 +10,6 @@ Content-Type: application/json
   "password": "12345"
 }
 
-> {%
-    client.global.set("userToken", response.body.accessToken);
-    client.log("OTA TOKENI OLINDI: " + response.body.accessToken);
-%}
-
-###
 
 ### =================================================================
 ### 2-QADAM: DOKTOR TIZIMGA KIRADI
@@ -29,12 +23,16 @@ Content-Type: application/json
   "password": "12345"
 }
 
-> {%
-    client.global.set("doctorToken", response.body.accessToken);
-    client.log("DOKTOR TOKENI OLINDI: " + response.body.accessToken);
-%}
+### =================================================================
+### 2-QADAM: FAQAT ADMIN
+### =================================================================
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
 
-###
+{
+  "username": "uktamov9198@mail.ru",
+  "password": "12345"
+}
 
 ### =================================================================
 ### 3-QADAM: OTA O'Z FARZANDI UCHUN KOD OLADI (GENERATE)
