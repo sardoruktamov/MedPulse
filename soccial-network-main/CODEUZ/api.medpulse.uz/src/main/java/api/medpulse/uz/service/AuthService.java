@@ -111,7 +111,7 @@ public class AuthService {
         // Usernameni tekshirish email yoki phone ekanligiga >>>PASTDA 2-USUL<<<<<
         if (EmailUtil.isEmail(dto.getUsername())){
             // send email
-            emailSendingService.sendEmailForRegistration(dto.getUsername(), entity.getId(), lang);
+            emailSendingService.sendEmailForRegistration(dto.getUsername(), entity.getId(), entity.getName(), lang);
         }else if (PhoneUtil.isPhone(dto.getUsername())){
             // send SMS
             smsSendService.sendRegistrationSms(dto.getUsername(), lang);

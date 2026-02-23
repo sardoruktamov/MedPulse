@@ -3,6 +3,7 @@ package api.medpulse.uz.util;
 
 import api.medpulse.uz.config.CustomUserDetails;
 import api.medpulse.uz.enums.ProfileRole;
+import api.medpulse.uz.exps.AppBadException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -10,14 +11,22 @@ public class SpringSecurityUtil {
 
     public static CustomUserDetails getCurrentProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-        return user;
+
+        // HIMOYA: Agar user login qilmagan bo'lsa, null qaytaramiz
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            return null;
+        }
+
+        return (CustomUserDetails) authentication.getPrincipal();
     }
 
     public static Integer getCurrentUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-        return user.getId();
+        CustomUserDetails userDetails = getCurrentProfile();
+        // HIMOYA: Agar null bo'lsa, darhol xato otamiz
+        if (userDetails == null) {
+            throw new AppBadException("Tizimga kirish talab etiladi!");
+        }
+        return userDetails.getId();
     }
 
     public static boolean hazRole(ProfileRole role) {

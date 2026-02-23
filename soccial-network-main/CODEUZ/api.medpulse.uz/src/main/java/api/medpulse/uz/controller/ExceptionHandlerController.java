@@ -1,10 +1,16 @@
 package api.medpulse.uz.controller;
 
 import api.medpulse.uz.dto.AppErrorDTO;
+import api.medpulse.uz.enums.ActionType;
 import api.medpulse.uz.exps.AppBadException;
+import api.medpulse.uz.service.LogService;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -15,11 +21,14 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @ControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
+    @Autowired
+    private LogService logService;
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
@@ -50,15 +59,39 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
      * Spring Security @PreAuthorize xatolarini shu yerda ushlaymiz.
      */
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<AppErrorDTO> handleAccessDenied(AccessDeniedException e) {
+    public ResponseEntity<AppErrorDTO> handleAccessDenied(AccessDeniedException e, HttpServletRequest request) {
         // Logga yozib qo'yamiz (kimdir "buzib kirishga" urindi)
         // log.warn("Ruxsatsiz urinish: {}", e.getMessage());
+        // 1. Qaysi URL ga urilganini olamiz (path: null ni to'g'irlash uchun)
+        String path = request.getRequestURI();
 
-        return ResponseEntity
-                .status(HttpStatus.FORBIDDEN) // 403 status
-                .body(new AppErrorDTO(
-                        "Sizda bu amalni bajarish uchun yetarli huquq yo'q! (Talab etiladi: SUPER_ADMIN)",
-                        403
-                ));
+        // 2. Kimligini aniqlaymiz (DOCTOR yoki boshqa USER tokeni bo'lgani uchun ID yoki Username chiqadi)
+        String userId = "ANONYMOUS";
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
+            userId = auth.getName();
+        }
+
+        // 3. QOPQON: XAKERNi (yoki ruxsatsiz Userni) BAZAGA YOZAMIZ
+        try {
+            logService.createSecurityLog(
+                    ActionType.UNAUTHORIZED_ACCESS,
+                    userId,
+                    "Ruxsatsiz kirish urinishi (403). Manba: Controller (@PreAuthorize)"
+            );
+        } catch (Exception ex) {
+            // Bazaga yozolmay qolsa ham dastur o'chib qolmasligi uchun try-catch qildik
+            ex.printStackTrace();
+        }
+
+        // 4. FRONTEND UCHUN JAVOB TAYYORLASH
+        AppErrorDTO errorDTO = new AppErrorDTO(
+                "Sizda bu amalni bajarish uchun yetarli huquq yo'q! (Talab etiladi: SUPER_ADMIN)",
+                403
+        );
+        errorDTO.setPath(path); // <--- Mana bu yerda URL ni berdik
+        errorDTO.setTimestamp(LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorDTO);
     }
 }

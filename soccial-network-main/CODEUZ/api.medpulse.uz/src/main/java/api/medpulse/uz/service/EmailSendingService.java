@@ -37,7 +37,7 @@ public class EmailSendingService {
     @Autowired
     private ResourceBundleService bundleService;
 
-    public void sendEmailForRegistration(String email, Integer profileId, AppLanguage lang){
+    public void sendEmailForRegistration(String email, Integer profileId,String name, AppLanguage lang){
         String subject = "Ro'yxatdan o'tish";
         String body = "<!DOCTYPE html>\n" +
                 "<html lang=\"en\">\n" +
@@ -71,8 +71,8 @@ public class EmailSendingService {
 
         body = String.format(body,serverDomain, JwtUtil.encode(profileId), lang.name());
         // sms_historyga saqlash uchun
-        CustomUserDetails currentProfile = SpringSecurityUtil.getCurrentProfile();
-        emailHistoryService.created(email, currentProfile.getName(), SmsType.REGISTRATION);
+//        CustomUserDetails currentProfile = SpringSecurityUtil.getCurrentProfile();
+        emailHistoryService.created(email, name, SmsType.REGISTRATION);
 
         sendMimeEmail(email,subject,body);
     }
