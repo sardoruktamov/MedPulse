@@ -21,19 +21,19 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         // general info
         Info info = new Info()
-                .title("CHATNET.UZ API-lar")
+                .title("MEDPULSE.UZ API-lar")
                 .version("1.0.0")
-                .description("Quyida chatnet.uz loyihasi uchun API hujjatlar tagdim qilingan.")
+                .description("Quyida medpulse.uz loyihasi uchun API hujjatlar tagdim qilingan.")
                 .contact(new Contact()
                         .name("Sardor")
                         .email("uktamov9198@mail.ru")
-                        .url("https://t.me/s_uktamov")
+                        .url("https://t.me/uktamov91")
                 )
                 .license(new License()
                         .name("Videohub.uz")
                         .url("https://videohub.uz/")
                 )
-                .termsOfService("Savol javob guruhi: https://t.me/code_uz_group");
+                .termsOfService("Savol javob guruhi: https://t.me/uktamov91");
 
         // servers (ishlatiladigan serverlar)
         Server server1 = new Server()
@@ -42,11 +42,11 @@ public class SwaggerConfig {
 
         Server server2 = new Server()
                 .description("DEV")
-                .url("http://api.chatnet.uz");
+                .url("http://api.medpulse.uz");
 
         Server server3 = new Server()
                 .description("PROD")
-                .url("http://api.chatnet.uz");
+                .url("http://api.medpulse.uz");
 
         // security type (bizning holatda JWT)
         SecurityRequirement securityRequirement = new SecurityRequirement();

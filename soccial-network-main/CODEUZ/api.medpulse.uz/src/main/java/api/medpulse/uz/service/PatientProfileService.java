@@ -40,6 +40,7 @@ public class PatientProfileService {
     private DistrictRepository districtRepository;
     @Autowired
     private AccessControlService accessControlService;
+
     // Profilni yangilash
     public PatientProfileDTO update(String profileId, PatientUpdateDTO dto) {
         // 1. Hozirgi kirgan foydalanuvchi (Ota) ID sini olamiz
@@ -47,7 +48,8 @@ public class PatientProfileService {
 
         // 2. Profilni qidiramiz: ID si bo'yicha VA egasi shu odam ekanligi bo'yicha
         PatientProfileEntity entity = patientProfileRepository.findByIdAndOwner_Id(profileId, currentUserId)
-                .orElseThrow(() -> new AppBadException("Profile not found or access denied/Profil topilmadi yoki kirish taqiqlandi"));
+                .orElseThrow(() -> new AppBadException(
+                        "Profile not found or access denied/Profil topilmadi yoki kirish taqiqlandi"));
 
         String deletePhotoId = null;
 
@@ -62,15 +64,22 @@ public class PatientProfileService {
         }
 
         // 3. Ma'lumotlarni yangilaymiz (faqat null bo'lmaganlarini)
-        if (dto.getFullName() != null) entity.setFullName(dto.getFullName());
-        if (dto.getBirthDate() != null) entity.setBirthDate(dto.getBirthDate());
-        if (dto.getGender() != null) entity.setGender(dto.getGender());
+        if (dto.getFullName() != null)
+            entity.setFullName(dto.getFullName());
+        if (dto.getBirthDate() != null)
+            entity.setBirthDate(dto.getBirthDate());
+        if (dto.getGender() != null)
+            entity.setGender(dto.getGender());
 
         // Tibbiy qism
-        if (dto.getBloodGroup() != null) entity.setBloodGroup(dto.getBloodGroup()); // Enum bo'lsa .name() shart emas
-        if (dto.getWeight() != null) entity.setWeight(dto.getWeight());
-        if (dto.getHeight() != null) entity.setHeight(dto.getHeight());
-        if (dto.getWorkingBloodPressure() != null) entity.setWorkingBloodPressure(dto.getWorkingBloodPressure());
+        if (dto.getBloodGroup() != null)
+            entity.setBloodGroup(dto.getBloodGroup()); // Enum bo'lsa .name() shart emas
+        if (dto.getWeight() != null)
+            entity.setWeight(dto.getWeight());
+        if (dto.getHeight() != null)
+            entity.setHeight(dto.getHeight());
+        if (dto.getWorkingBloodPressure() != null)
+            entity.setWorkingBloodPressure(dto.getWorkingBloodPressure());
         // Token generatsiya qilish
         entity.setQrToken(RandomUtil.generateQrToken());
 
@@ -139,12 +148,17 @@ public class PatientProfileService {
         entity.setOwner(owner); // <--- BOG'LASH JARAYONI
 
         // 4. Qo'shimcha ma'lumotlar bor bo'lsa, ularni ham qo'shamiz
-        if (dto.getPhotoId() != null) entity.setPhotoId(dto.getPhotoId());
-        if (dto.getBloodGroup() != null) entity.setBloodGroup(dto.getBloodGroup());
-        if (dto.getWeight() != null) entity.setWeight(dto.getWeight());
-        if (dto.getHeight() != null) entity.setHeight(dto.getHeight());
-        if (dto.getWorkingBloodPressure() != null) entity.setWorkingBloodPressure(dto.getWorkingBloodPressure());
-// Token generatsiya qilish
+        if (dto.getPhotoId() != null)
+            entity.setPhotoId(dto.getPhotoId());
+        if (dto.getBloodGroup() != null)
+            entity.setBloodGroup(dto.getBloodGroup());
+        if (dto.getWeight() != null)
+            entity.setWeight(dto.getWeight());
+        if (dto.getHeight() != null)
+            entity.setHeight(dto.getHeight());
+        if (dto.getWorkingBloodPressure() != null)
+            entity.setWorkingBloodPressure(dto.getWorkingBloodPressure());
+        // Token generatsiya qilish
         entity.setQrToken(RandomUtil.generateQrToken());
 
         // 1. Allergiyani yangilash
@@ -187,24 +201,26 @@ public class PatientProfileService {
 
         Integer currentUserId = SpringSecurityUtil.getCurrentUserId();
 
-        // 2. TEKSHIRUV: So'rov qilayotgan odam shu bemorning OTASI (Owner) ekanligini tekshiramiz
+        // 2. TEKSHIRUV: So'rov qilayotgan odam shu bemorning OTASI (Owner) ekanligini
+        // tekshiramiz
         boolean isOwner = entity.getOwner().getId().equals(currentUserId);
 
         // 3. MANTIQ:
         if (isOwner) {
             // A) Agar OTA bo'lsa -> To'siqsiz ruxsat
             return toDTO(entity);
-        }
-        else if (SpringSecurityUtil.hazRole(ProfileRole.ROLE_DOCTOR)) {
+        } else if (SpringSecurityUtil.hazRole(ProfileRole.ROLE_DOCTOR)) {
             // B) Agar DOKTOR bo'lsa -> Ruxsatnomasi (Access) borligini tekshiramiz
-            // Agar ruxsati bo'lmasa, checkDoctorAccess() metodi Exception otadi va kod shu yerda to'xtaydi.
+            // Agar ruxsati bo'lmasa, checkDoctorAccess() metodi Exception otadi va kod shu
+            // yerda to'xtaydi.
             accessControlService.checkDoctorAccess(id);
 
             // Agar exception otmasa, demak ruxsat bor
             return toDTO(entity);
         }
 
-        // 4. Agar Ota ham, Ruxsatli Doktor ham bo'lmasa (Admin, SuperAdmin, Begona User)
+        // 4. Agar Ota ham, Ruxsatli Doktor ham bo'lmasa (Admin, SuperAdmin, Begona
+        // User)
         // Qat'iy rad etamiz!
         throw new AppBadException("Sizda bu bemor ma'lumotlarini ko'rishga ruxsat yo'q!");
     }
@@ -226,8 +242,12 @@ public class PatientProfileService {
         dto.setWeight(entity.getWeight());
         dto.setHeight(entity.getHeight());
 
-        dto.setRegionId(entity.getRegion().getId());
-        dto.setDistrictId(entity.getDistrict().getId());
+        if (entity.getRegion() != null) {
+            dto.setRegionId(entity.getRegion().getId());
+        }
+        if (entity.getDistrict() != null) {
+            dto.setDistrictId(entity.getDistrict().getId());
+        }
         dto.setAddress(entity.getAddress());
 
         dto.setAllergies(entity.getAllergies());
@@ -236,6 +256,5 @@ public class PatientProfileService {
         dto.setWorkingBloodPressure(entity.getWorkingBloodPressure());
         return dto;
     }
-
 
 }
