@@ -29,7 +29,7 @@ public class ProfileEntity {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private GeneralStatus status;  // ACTIVE, BLOCK
+    private GeneralStatus status; // ACTIVE, BLOCK
 
     @Column(name = "visible")
     private Boolean visible = Boolean.TRUE;
@@ -43,6 +43,12 @@ public class ProfileEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "photo_id", insertable = false, updatable = false)
     private AttachEntity photo;
+
+    @Column(name = "terms_accepted")
+    private Boolean termsAccepted;
+
+    @Column(name = "terms_accepted_date")
+    private LocalDateTime termsAcceptedDate;
 
     @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY)
     private List<ProfileRoleEntity> roleList;

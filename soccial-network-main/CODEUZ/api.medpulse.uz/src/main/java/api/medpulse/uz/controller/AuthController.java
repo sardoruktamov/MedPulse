@@ -9,14 +9,19 @@ import api.medpulse.uz.dto.auth.ResetPasswordDTO;
 import api.medpulse.uz.dto.sms.SmsResentDTO;
 import api.medpulse.uz.dto.sms.SmsVerificationDTO;
 import api.medpulse.uz.enums.AppLanguage;
+import api.medpulse.uz.exps.AppBadException;
 import api.medpulse.uz.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -26,6 +31,9 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
+
+    @Value("${app.frontend.domain}")
+    private String frontendDomain;
 
     @PostMapping("/registration")
     @Operation(summary = "Profile registration", description = "Api used for registration")
@@ -38,9 +46,34 @@ public class AuthController {
     @GetMapping("/registration/email-verification/{token}")
     @Operation(summary = "Email verification", description = "Api used for Email registration verification")
     public ResponseEntity<String> emailVerification(@PathVariable("token") String token,
-                                                  @RequestParam(value = "lang", defaultValue = "UZ") AppLanguage lang){
+                                                  @RequestParam(value = "lang", defaultValue = "UZ") AppLanguage lang,
+                                                    @RequestParam(value = "client", defaultValue = "web") String client // Qayerdan kelganini aniqlaymiz
+                                                    ){
         log.info("Registration Email verificationtoken: {}", token);
-        return ResponseEntity.ok().body(authService.registrationEmailVerification(token,lang));
+        try {
+            authService.registrationEmailVerification(token, lang);
+
+            // MUVAFFAQIYATLI: Foydalanuvchini Login sahifasiga yo'naltirish
+            String redirectUrl;
+            // Agar mobil ilovadan bo'lsa, Deep Link ga yo'naltiramiz
+            if (client.equals("mobile")) {
+                redirectUrl = "medpulse://auth/login?verified=true";
+            } else {
+                // Agar Web bo'lsa, saytga yo'naltiramiz
+                redirectUrl = frontendDomain + "/login?verified=true";
+            }
+
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .location(URI.create(redirectUrl))
+                    .build();
+
+        } catch (AppBadException e) {
+            // XATOLIK: Foydalanuvchini xatolik sahifasiga yo'naltirish
+            String errorUrl = frontendDomain + "/login?error=verification_failed";
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .location(URI.create(errorUrl))
+                    .build();
+        }
     }
 
     @PostMapping("/registration/email-verification-resent")

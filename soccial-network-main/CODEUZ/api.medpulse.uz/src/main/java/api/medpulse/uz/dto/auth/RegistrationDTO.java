@@ -26,4 +26,7 @@ public class RegistrationDTO {
 
     @NotNull(message = "Birth date required")
     private LocalDate birthDate; // Sana (yyyy-MM-dd formatida keladi)
+
+    @NotNull(message = "Terms and Privacy must be accepted")
+    private Boolean termsAccepted;
 }
