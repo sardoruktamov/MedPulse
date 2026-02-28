@@ -1,15 +1,24 @@
 ### OTA PatientProfil malumotlarini olish
 GET http://localhost:8080/api/v1/patient/my-profiles
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3Njk5NTQzMDIsImV4cCI6MTc3MDA0MDcwMn0.F2DaDdL_knHRuBDm5g1z5N9H2r7yc0gWklkrUaj26B93Fsj-ltRiZAvNHMfq7fbrgGNihw_qqEVaEi61LmFsgg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUixST0xFX1NVUEVSQURNSU4sUk9MRV9BRE1JTiIsImlkIjoiMSIsImlhdCI6MTc3MjI3MjAxMywiZXhwIjoxNzcyMzU4NDEzfQ.oUiUguFtFj6VRsdByoNaNCfLTdp-bfqsf_o_C6EWIslPD53oJmwFhj6t3AK9P-2PnCgBbaFuVah6d4QT7_6uhA
 
 {
 }
 
+### Bemor profilini olish (bunda ID-bemor ID si)
+GET http://localhost:8080/api/v1/patient/f85815cf-3004-4707-a60b-5c63b129d80d
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUixST0xFX1NVUEVSQURNSU4sUk9MRV9BRE1JTiIsImlkIjoiMSIsImlhdCI6MTc3MjI3MjAxMywiZXhwIjoxNzcyMzU4NDEzfQ.oUiUguFtFj6VRsdByoNaNCfLTdp-bfqsf_o_C6EWIslPD53oJmwFhj6t3AK9P-2PnCgBbaFuVah6d4QT7_6uhA
+
+{
+}
+
+
 ### Ota o'zi yoki oila azosining patientProfileEntty qismini tahrirlash
 PUT http://localhost:8080/api/v1/patient/7ffe334d-7c50-47a1-95f9-5d1965eabc76
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3NzEwNjk1MzAsImV4cCI6MTc3MTE1NTkzMH0.MVeXDpYm9xpJulGSveomotA2Rz5hDb2xh607mK8Otso0G4WrU_LN5jr_yh0OzKY2nw8dtrKnIFDEpup0pPppVQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUixST0xFX1NVUEVSQURNSU4sUk9MRV9BRE1JTiIsImlkIjoiMSIsImlhdCI6MTc3MjI3MjAxMywiZXhwIjoxNzcyMzU4NDEzfQ.oUiUguFtFj6VRsdByoNaNCfLTdp-bfqsf_o_C6EWIslPD53oJmwFhj6t3AK9P-2PnCgBbaFuVah6d4QT7_6uhA
 
 {
   "regionId": 12,
@@ -32,19 +41,21 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlc
 ### Oila a'zosini qo'shish (Farzand yoki boshqa)
 POST http://localhost:8080/api/v1/patient/family
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3NzAxMzgwMTgsImV4cCI6MTc3MDIyNDQxOH0.5_C0HyBm7dp91o0R4g0aUrrcQ4pYek1lcpG3xfm5o2N-yvi7sQKjkQhE18O1b1byyDfJEa33TUtnBYj6z0N6ng
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUixST0xFX1NVUEVSQURNSU4sUk9MRV9BRE1JTiIsImlkIjoiMSIsImlhdCI6MTc3MTc1NTIwOCwiZXhwIjoxNzcxODQxNjA4fQ.QHPfo0NBen5AUvsgIC1f8N-eSufITniHYD-2pEP7lZT5ABvOQo2wIzLil2RhD26kzAPvlNYS4VIKAmmja8OOKQ
 
 {
-  "fullName": "Zoxidaxon Farxodjonova",
-  "birthDate": "2022-09-26",
+  "fullName": "Sobirova Munojatxon",
+  "birthDate": "1971-09-26",
   "photoId": "b6dc146c-0cd2-4b07-b8e5-4adfc4b7480f.jpg",
-  "allergies": "chang va tutunga, Paratsetamol",
+  "allergies": "allergiyasi yoq",
   "gender": "FEMALE",
   "bloodGroup": "A_POSITIVE",
-  "weight": 12.5,
-  "height": 95.0,
+  "weight": 95.5,
+  "height": 160.0,
   "workingBloodPressure": "120/80",
-  "emergencyContactPhone": "998915555555"
+  "emergencyContactPhone": "998915559955",
+  "regionId": 12,
+  "districtId": 179
 }
 
 ### ------------------------------------------------------------
@@ -53,8 +64,8 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlc
 ### Bu so'rov orqali server:
 ### 1. Agar bemorda qrToken bo'lmasa, yangi token (masalan: X9z1bP) yaratadi va saqlaydi.
 ### 2. QR kod rasmini (PNG) qaytaradi.
-GET localhost:8080/api/v1/patient/qr/1acc1c49-8b2f-4cff-ad05-d0191f8e01a9
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3NzAxMzgwMTgsImV4cCI6MTc3MDIyNDQxOH0.5_C0HyBm7dp91o0R4g0aUrrcQ4pYek1lcpG3xfm5o2N-yvi7sQKjkQhE18O1b1byyDfJEa33TUtnBYj6z0N6ng
+GET localhost:8080/api/v1/patient/qr/X9z1bP
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUixST0xFX1NVUEVSQURNSU4sUk9MRV9BRE1JTiIsImlkIjoiMSIsImlhdCI6MTc3MjI3MjAxMywiZXhwIjoxNzcyMzU4NDEzfQ.oUiUguFtFj6VRsdByoNaNCfLTdp-bfqsf_o_C6EWIslPD53oJmwFhj6t3AK9P-2PnCgBbaFuVah6d4QT7_6uhA
 Accept: image/png
 
 # ------------------------------------------------------------

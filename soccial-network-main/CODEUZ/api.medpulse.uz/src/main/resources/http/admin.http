@@ -15,8 +15,8 @@ Accept-Language: UZ
 ### 2-QADAM: USERGA ADMIN HUQUQINI BERISH
 ### Ssenariy: SuperAdmin bir xodimni ishga oldi va unga Admin panelni ochib beryapti.
 ### =================================================================
-POST http://localhost:8080/api/v1/admin/change-role/to-admin/14
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3NzEwNjk1MzAsImV4cCI6MTc3MTE1NTkzMH0.MVeXDpYm9xpJulGSveomotA2Rz5hDb2xh607mK8Otso0G4WrU_LN5jr_yh0OzKY2nw8dtrKnIFDEpup0pPppVQ
+POST http://localhost:8080/api/v1/admin/change-role/to-admin/5
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUixST0xFX1NVUEVSQURNSU4sUk9MRV9BRE1JTiIsImlkIjoiMSIsImlhdCI6MTc3MTE3MDI2MSwiZXhwIjoxNzcxMjU2NjYxfQ.mzKFZHMON0uqWpkGDBF2WgCTtQFZZk9oKupS2NCzE3QpeeYdJoiD2TahN_-1-i94KTz5eNEFpxJAGI0BeBQ5LA
 Content-Type: application/json
 
 ### KUTILAYOTGAN NATIJA:

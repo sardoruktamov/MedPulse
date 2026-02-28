@@ -4,11 +4,12 @@ Content-Type: application/json
 Accept-Language: UZ
 
 {
-  "name": "Olimov Anvar",
-  "username": "sardorbek.uktamov.1@gmail.com",
+  "name": "Muhammadjonov Muhammad Bobur",
+  "username": "sardorbek.uktamov.1@mail.ru",
   "password": "12345",
   "gender": "MALE",
-  "birthDate": "1990-10-04"
+  "birthDate": "1998-09-25",
+  "termsAccepted": true
 }
 
 ### Registration verification
