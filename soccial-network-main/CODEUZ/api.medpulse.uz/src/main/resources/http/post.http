@@ -4,11 +4,12 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTUwODEwOSwiZXhwIjoxNzY5NTk0NTA5fQ.V2NKbnzPA0dWDThre9_vSMWpcHyvgROEaz2CUNyTiBh41Qgwg3BAxg4Eww_OECRuCWyGvcHGpoL1jRpWQNXvyQ
 
 {
-  "title": "2-user-93 6777 yaratgan POST",
-  "content": "Test uchun user-93 6777 yaratgan POST sf sdfsd fsd fw ef wef sdf",
-  "photo": {
-    "id": "39d27dd9-026e-4325-8213-4912e8f55d17.png"
-  }
+  "title": "Yangi tibbiy post (Multi-media)",
+  "content": "Ushbu postda bir nechta rasm va videolar mavjud.",
+  "attachIdList": [
+    "39d27dd9-026e-4325-8213-4912e8f55d17.png",
+    "second-file-id.jpg"
+  ]
 }
 
 ### Post UPDATE
@@ -17,11 +18,13 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTUwODEwOSwiZXhwIjoxNzY5NTk0NTA5fQ.V2NKbnzPA0dWDThre9_vSMWpcHyvgROEaz2CUNyTiBh41Qgwg3BAxg4Eww_OECRuCWyGvcHGpoL1jRpWQNXvyQ
 
 {
-  "title": "Toshkentda retsepsiz dori sotish to‘xtadi. Dorixonalarda vaziyat qanday?",
-  "content": "Kun.uz bilan suhbatda bo‘lgan sotuvchilardan birining bildirishicha, mijozlarning juda kamchiligi retsept bilan kelishyapti, aksariyati yangilikdan bexabar. Ammo “apteka”chilar ancha avval ogohlantirilgani, tizimga moslangani aytilmoqda.DMED [tibbiy axborot tizimi]ni har bittamizga tushuntirib, kompyuterdan ko‘rsatib, o‘rgatib ketishdi. Asosan faqat DMED retsept bilan beriladi deb aytishdi. Chet elda shunaqa-ku, o‘sha tizim bizga kirib kelgan. Bir tomondan yaxshi, lekin og‘ir kasallar bo‘lsa, birdaniga yosh bolalilar bor, “bering tez”, deb aytyapti, lekin [retsepti] oddiy qog‘ozda. O‘shanga ham berishimizga haqqimiz yo‘q ekan.",
-  "photo": {
-    "id": "39d27dd9-026e-4325-8213-4912e8f55d17.png"
-  }
+  "title": "Tahrirlangan post (Multi-media)",
+  "content": "Post mazmuni va rasmlari yangilandi.",
+  "attachIdList": [
+    "new-photo-1.png",
+    "updated-video.mp4",
+    "old-photo-kept.jpg"
+  ]
 }
 
 ### get Posts in Admin Profile filter by name, title

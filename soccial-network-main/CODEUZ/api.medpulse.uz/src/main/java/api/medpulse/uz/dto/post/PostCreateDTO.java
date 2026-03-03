@@ -1,11 +1,12 @@
 package api.medpulse.uz.dto.post;
 
-import api.medpulse.uz.dto.AttachCreateDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,7 +19,7 @@ public class PostCreateDTO {
     @NotBlank(message = "Content required")
     private String content;
 
-    @NotNull(message = "Photo required")
-    private AttachCreateDTO photo;
+    @NotNull(message = "At least one media required")
+    private List<String> attachIdList; // 4 tagacha rasm yoki video IDlari
 
 }

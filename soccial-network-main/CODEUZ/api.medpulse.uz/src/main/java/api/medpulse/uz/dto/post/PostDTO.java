@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,7 +20,7 @@ public class PostDTO {
 
     private String content;
 
-    private AttachDTO photo;
+    private List<AttachDTO> mediaList;
 
     private LocalDateTime createdDate;
 

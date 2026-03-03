@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "post")
@@ -23,16 +24,12 @@ public class PostEntity {
     @Column(name = "content", columnDefinition = "text")
     private String content;
 
-    @Column(name = "photo_id")
-    private String photoId;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "photo_id", insertable = false,updatable = false)
-    private AttachEntity photo;
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    private List<PostAttachEntity> attachList;
 
     @Column(name = "profile_id", nullable = false)
     private Integer profileId;
-    @JoinColumn(name = "profile_id", insertable = false,updatable = false)
+    @JoinColumn(name = "profile_id", insertable = false, updatable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private ProfileEntity profile;
 
