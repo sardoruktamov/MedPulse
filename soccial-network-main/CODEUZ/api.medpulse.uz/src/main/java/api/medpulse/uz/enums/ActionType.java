@@ -17,10 +17,15 @@ public enum ActionType {
 
     // Muhim ko'rishlar (Privacy)
     VIEW_PATIENT_HISTORY, // Bemor tarixini ko'rish
-    VIEW_PATIENT_PROFILE,  // Bemor profilini ko'rish
+    VIEW_PATIENT_PROFILE, // Bemor profilini ko'rish
 
     // Hackerlar uchun qopqon
     SECURITY_BREACH_ATTEMPT, // Jiddiy xavfsizlik buzilishi (Xakerlik gumoni)
-    LOGIN_FAILED,            // Kirishda xatolik (Parol noto'g'ri)
-    UNAUTHORIZED_ACCESS      // Ruxsat yo'q joyga kirish (403)
+    LOGIN_FAILED, // Kirishda xatolik (Parol noto'g'ri)
+    UNAUTHORIZED_ACCESS, // Ruxsat yo'q joyga kirish (403)
+
+    // Post boshqaruvi (Admin uchun)
+    POST_UPDATE,
+    POST_DELETE,
+    POST_VISIBLE_OFF
 }
