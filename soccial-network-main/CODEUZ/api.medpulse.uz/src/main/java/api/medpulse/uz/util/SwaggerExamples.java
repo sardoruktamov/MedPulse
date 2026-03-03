@@ -4,18 +4,21 @@ public class SwaggerExamples {
 
     public static final String PATIENT_PROFILE_RESPONSE_SUCCESS = """
             {
-              "id": "123e4567-e89b-12d3-a456-426614174000",
-              "firstName": "Ali",
-              "lastName": "Valiyev",
-              "pinfl": "12345678901234",
-              "birthDate": "1990-01-01",
-              "gender": "MALE",
-              "bloodGroup": "A_PLUS",
-              "address": "Tashkent, Chilonzor",
-              "passportSeria": "AA",
-              "passportNumber": "1234567",
-              "maritalStatus": "MARRIED",
-              "nationality": "Uzbek"
+              "id": "7ffe334d-7c50-47a1-95f9-5d1965eabc76",
+                   "fullName": "O'ktamov Sardorbek",
+                   "birthDate": "1991-12-24",
+                   "gender": "MALE",
+                   "photo": "b6dc146c-0cd2-4b07-b8e5-4adfc4b7480f.jpg",
+                   "bloodGroup": "A_POSITIVE",
+                   "weight": 70.0,
+                   "height": 182.0,
+                   "workingBloodPressure": "120/80",
+                   "regionId": 12,
+                   "districtId": 179,
+                   "address": "Bog'iston MFY,Posbonlar k. 8-uy",
+                   "allergies": "chang va tutunga, Paratsetamol",
+                   "emergencyContactName": "onam Sobirova Munojatxon",
+                   "emergencyContactPhone": "998905846866"
             }
             """;
 

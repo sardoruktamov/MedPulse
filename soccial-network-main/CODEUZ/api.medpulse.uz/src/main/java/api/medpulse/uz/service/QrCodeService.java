@@ -20,7 +20,7 @@ public class QrCodeService {
 
     private final PatientProfileRepository patientProfileRepository;
 
-    @Value("${baze.url.address}")
+    @Value("${app.frontend.domain}")
     private String baseUrl; // Masalan: https://medpulse.uz
 
     @Value("${medpulse.qr.width}")

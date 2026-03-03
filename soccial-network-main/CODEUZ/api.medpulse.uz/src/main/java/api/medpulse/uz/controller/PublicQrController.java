@@ -21,7 +21,7 @@ public class PublicQrController {
     // Frontend shu yerga murojaat qilib JSON oladi
     // GET /api/v1/public/qr/info/{qrToken}
     @GetMapping("/info/{qrToken}")
-    public ResponseEntity<QrInfoResponseDTO> getPatientInfo(@PathVariable String qrToken) {
+    public ResponseEntity<QrInfoResponseDTO> getPatientInfo(@PathVariable("qrToken") String qrToken) {
         return ResponseEntity.ok(qrScanService.getPatientDataByToken(qrToken));
     }
 }
