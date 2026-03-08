@@ -27,14 +27,14 @@ public class PostController {
     private PostService postService;
 
     @PostMapping("")
-    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    @PreAuthorize("hasRole('DOCTOR')")
     @Operation(summary = "Create Post", description = "Api used for Post creation ")
     public ResponseEntity<PostDTO> create(@Valid @RequestBody PostCreateDTO dto) {
         return ResponseEntity.ok(postService.create(dto));
     }
 
     @GetMapping("/profile")
-    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    @PreAuthorize("hasRole('DOCTOR')")
     @Operation(summary = "Get Post List", description = "Api used for Get All Profile Post List")
     public ResponseEntity<Page<PostDTO>> postListByProfile(@RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "3") int size) {
@@ -48,7 +48,7 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_DOCTOR', 'ROLE_ADMIN', 'ROLE_SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'ADMIN', 'SUPERADMIN')")
     @Operation(summary = "Update Post", description = "Api used for Post update")
     public ResponseEntity<PostDTO> update(@PathVariable("id") String id,
             @Valid @RequestBody PostCreateDTO dto) {
@@ -56,7 +56,7 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_DOCTOR', 'ROLE_ADMIN', 'ROLE_SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('DOCTOR', 'ADMIN', 'SUPERADMIN')")
     @Operation(summary = "Delete Post", description = "Api used for Post Delete")
     public ResponseEntity<AppResponse<String>> delete(@PathVariable("id") String id) {
         return ResponseEntity.ok(postService.delete(id));
@@ -77,7 +77,7 @@ public class PostController {
     }
 
     @PostMapping("/admin-post-list/filter")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Post list filter for admin", description = "Api used for filtering for admin post list ")
     public ResponseEntity<PageImpl<PostDTO>> filter(@Valid @RequestBody PostAdminFilterDTO dto,
             @RequestParam(value = "page", defaultValue = "1") int page,

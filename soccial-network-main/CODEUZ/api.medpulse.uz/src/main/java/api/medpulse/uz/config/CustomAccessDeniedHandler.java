@@ -29,7 +29,8 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     private final LogService logService;
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+    public void handle(HttpServletRequest request, HttpServletResponse response,
+            AccessDeniedException accessDeniedException) throws IOException, ServletException {
 
         // ------------------------------------------------------------
         // 1-QISM: USERNI ANIQLASH VA LOG YOZISH (Xavfsizlik uchun)
@@ -47,8 +48,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             logService.createSecurityLog(
                     ActionType.UNAUTHORIZED_ACCESS,
                     userId,
-                    "Ruxsatsiz kirish urinishi (403 Forbidden)"
-            );
+                    "Ruxsatsiz kirish urinishi (403 Forbidden)");
         } catch (Exception ex) {
             // Agar log yozishda xato bo'lsa, dastur to'xtab qolmasligi kerak
             log.error("Log yozishda xatolik: {}", ex.getMessage());
@@ -64,9 +64,8 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
         // DTO yasash (Sizning kodingizdan olindi - to'liq variant)
         AppErrorDTO errorDTO = new AppErrorDTO(
-                "Sizda bu amalni bajarish uchun yetarli huquq yo'q! (Access Denied)",
-                403
-        );
+                "Sizda ushbu amalni bajarish uchun ruxsat yo'q!",
+                403);
 
         // Qo'shimcha ma'lumotlar (Qaysi URL va Qachon?)
         errorDTO.setPath(request.getRequestURI()); // Masalan: /api/v1/admin/delete

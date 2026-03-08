@@ -29,8 +29,10 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @Autowired
     private LogService logService;
+
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+            HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
         body.put("status", status.value());
@@ -44,12 +46,12 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handle(AppBadException e){
+    public ResponseEntity<String> handle(AppBadException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handle(RuntimeException e){
+    public ResponseEntity<String> handle(RuntimeException e) {
         e.printStackTrace();
         return ResponseEntity.internalServerError().body(e.getMessage());
     }
@@ -65,7 +67,8 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         // 1. Qaysi URL ga urilganini olamiz (path: null ni to'g'irlash uchun)
         String path = request.getRequestURI();
 
-        // 2. Kimligini aniqlaymiz (DOCTOR yoki boshqa USER tokeni bo'lgani uchun ID yoki Username chiqadi)
+        // 2. Kimligini aniqlaymiz (DOCTOR yoki boshqa USER tokeni bo'lgani uchun ID
+        // yoki Username chiqadi)
         String userId = "ANONYMOUS";
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
@@ -77,8 +80,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
             logService.createSecurityLog(
                     ActionType.UNAUTHORIZED_ACCESS,
                     userId,
-                    "Ruxsatsiz kirish urinishi (403). Manba: Controller (@PreAuthorize)"
-            );
+                    "Ruxsatsiz kirish urinishi (403). Manba: Controller (@PreAuthorize)");
         } catch (Exception ex) {
             // Bazaga yozolmay qolsa ham dastur o'chib qolmasligi uchun try-catch qildik
             ex.printStackTrace();
@@ -86,9 +88,8 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
         // 4. FRONTEND UCHUN JAVOB TAYYORLASH
         AppErrorDTO errorDTO = new AppErrorDTO(
-                "Sizda bu amalni bajarish uchun yetarli huquq yo'q! (Talab etiladi: SUPER_ADMIN)",
-                403
-        );
+                "Sizda ushbu amalni bajarish uchun ruxsat yo'q!",
+                403);
         errorDTO.setPath(path); // <--- Mana bu yerda URL ni berdik
         errorDTO.setTimestamp(LocalDateTime.now());
 
