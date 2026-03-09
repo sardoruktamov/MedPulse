@@ -29,34 +29,44 @@ function getPostList() {
             return response.json();
         })
         .then(data => {
-            if (data.content && data.content.length > 0){
+            if (data.content && data.content.length > 0) {
                 showMainPost(data.content[0]);
                 data.content.shift()   // remove 0
-                console.log("malumotlar" + data.content[0].title)
+
+                if (data.content.length > 0 && data.content[0]) {
+                    console.log("Ma'lumotlar yuklandi: " + data.content[0].title);
+                }
 
                 showPostList(data.content);
                 showPagination(data.totalElements, size)
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Xatolik yuz berdi:', error);
         });
 }
 
 function showMainPost(mainPost) {
     const image = document.getElementById("main-card-imageId");
-    if (mainPost.photo && mainPost.photo.url){
-        image.src = mainPost.photo.url;
-    }else {
-        image.src = './images/post-default-img.jpg';
+    if (image) {
+        if (mainPost.photo && mainPost.photo.url) {
+            image.src = mainPost.photo.url;
+        } else {
+            image.src = './images/default-img.png';
+        }
     }
 
-    document.getElementById("main-card-dateId").textContent = mainPost.createdDate;
-    document.getElementById("main-card-titleId").textContent = mainPost.title;
-    document.getElementById("main-card-detailBtnId").href = "post-detail.html?id=" + mainPost.id;
+    const dateEl = document.getElementById("main-card-dateId");
+    if (dateEl) dateEl.textContent = mainPost.createdDate;
+
+    const titleEl = document.getElementById("main-card-titleId");
+    if (titleEl) titleEl.textContent = mainPost.title;
+
+    const btnEl = document.getElementById("main-card-detailBtnId");
+    if (btnEl) btnEl.href = "post-detail.html?id=" + mainPost.id;
 }
 
-function showPostList(postList){
+function showPostList(postList) {
     const parent = document.getElementById("post_container_id")
     parent.innerHTML = '';
     postList.forEach(postItem => {

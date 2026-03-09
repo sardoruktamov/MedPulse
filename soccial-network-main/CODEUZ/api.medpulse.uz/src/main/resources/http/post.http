@@ -1,14 +1,24 @@
+### Upload Attach
+POST http://localhost:8080/api/v1/attach/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUixST0xFX1NVUEVSQURNSU4sUk9MRV9BRE1JTiIsImlkIjoiMSIsImlhdCI6MTc3MjU2MDA1NiwiZXhwIjoxNzcyNjQ2NDU2fQ.1gZIDOebg8Yax_UJfl_YVb6cenRD8MKWaGXtSdA9u_UYwiSfnHfQwLf-hOUaiu7-1ZpLuahGf3D08bZw8FPx8Q
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="444.png"
+
+< E:\PHOTOS\444.png
+
 ### Post create
 POST localhost:8080/api/v1/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiMSIsImlhdCI6MTc2OTUwODEwOSwiZXhwIjoxNzY5NTk0NTA5fQ.V2NKbnzPA0dWDThre9_vSMWpcHyvgROEaz2CUNyTiBh41Qgwg3BAxg4Eww_OECRuCWyGvcHGpoL1jRpWQNXvyQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXJkb3JiZWsudWt0YW1vdi4xQG1haWwucnUiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlkIjoiNDQiLCJpYXQiOjE3NzI1NjAxOTAsImV4cCI6MTc3MjY0NjU5MH0.wUuWvjNUAozF88n8onmrumw4zh1jICMIzdhRQLelbaokEDXKxFjC_vsJk-FOZdSFCRW6gBOdq_zRUokSrjPqag
 
 {
   "title": "Yangi tibbiy post (Multi-media)",
   "content": "Ushbu postda bir nechta rasm va videolar mavjud.",
   "attachIdList": [
-    "39d27dd9-026e-4325-8213-4912e8f55d17.png",
-    "second-file-id.jpg"
+    "3e4b3708-98a6-45be-b125-ce6e4685ed58.png",
+    "0454b804-9474-4ff5-a94d-de8995ca3cbe.png"
   ]
 }
 
@@ -75,10 +85,10 @@ Content-Type: application/json
 }
 
 ### Login -USER
-POST localhost:8080/auth/login
+POST localhost:8080/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "username": "998930766777",
+  "username": "998911576777",
   "password": "12345"
 }

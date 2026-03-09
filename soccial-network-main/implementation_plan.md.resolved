@@ -1,0 +1,34 @@
+# Implementation Plan - Add Swagger Documentation to AccessController
+
+The goal is to add OpenAPI (Swagger) annotations to [AccessController.java](file:///e:/WEB/PROJECTS/JAVA/boshqa%20loyihalar/MedPulse/soccial-network-main/CODEUZ/api.medpulse.uz/src/main/java/api/medpulse/uz/controller/AccessController.java) to improve API documentation, specifically for [generateCode()](file:///e:/WEB/PROJECTS/JAVA/boshqa%20loyihalar/MedPulse/soccial-network-main/CODEUZ/api.medpulse.uz/src/main/java/api/medpulse/uz/controller/AccessController.java#15-20) and [verifyCode()](file:///e:/WEB/PROJECTS/JAVA/boshqa%20loyihalar/MedPulse/soccial-network-main/CODEUZ/api.medpulse.uz/src/main/java/api/medpulse/uz/controller/AccessController.java#21-27) methods.
+
+## Proposed Changes
+
+### [AccessController](file:///e:/WEB/PROJECTS/JAVA/boshqa%20loyihalar/MedPulse/soccial-network-main/CODEUZ/api.medpulse.uz/src/main/java/api/medpulse/uz/controller/AccessController.java)
+
+- Add `@Tag` annotation to the class level to categorize the API.
+- Add `@Operation` annotations to [generateCode](file:///e:/WEB/PROJECTS/JAVA/boshqa%20loyihalar/MedPulse/soccial-network-main/CODEUZ/api.medpulse.uz/src/main/java/api/medpulse/uz/controller/AccessController.java#15-20) and [verifyCode](file:///e:/WEB/PROJECTS/JAVA/boshqa%20loyihalar/MedPulse/soccial-network-main/CODEUZ/api.medpulse.uz/src/main/java/api/medpulse/uz/controller/AccessController.java#21-27) methods.
+- Add `@Parameter` annotations to describe method parameters.
+
+#### [MODIFY] [AccessController.java](file:///e:/WEB/PROJECTS/JAVA/boshqa%20loyihalar/MedPulse/soccial-network-main/CODEUZ/api.medpulse.uz/src/main/java/api/medpulse/uz/controller/AccessController.java)
+
+```java
+@Tag(name = "Access Controller", description = "API for generating and verifying access codes for patients")
+public class AccessController {
+    // ...
+    @Operation(summary = "Generate access code", description = "Generates a temporary access code for a patient. Requires USER role.")
+    public ResponseEntity<String> generateCode(@Parameter(description = "ID of the patient") @PathVariable String patientId) { ... }
+
+    @Operation(summary = "Verify access code", description = "Verifies the access code provided by a doctor. Requires DOCTOR role. Returns Patient ID.")
+    public ResponseEntity<String> verifyCode(@Parameter(description = "Access code to verify") @RequestParam("code") String code) { ... }
+}
+```
+
+## Verification Plan
+
+### Automated Tests
+- I will check if the code compiles after the changes. Since I don't have a full build environment setup to run the whole app, I will rely on syntax correctness.
+- I will verify that the imports are correctly added.
+
+### Manual Verification
+- The user can verify the documentation by visiting the Swagger UI (usually at `/swagger-ui/index.html` or `/swagger-ui.html`) after running the application.

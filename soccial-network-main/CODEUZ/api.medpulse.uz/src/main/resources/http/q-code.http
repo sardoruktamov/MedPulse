@@ -11,8 +11,8 @@
 # 1. Tizim bemorga yangi 'qrToken' generatsiya qiladi (agar yo'q bo'lsa).
 # 2. Javob sifatida PNG rasm qaytadi.
 # 3. Siz bu rasmni ko'z bilan ko'rasiz, lekin token ichida yashiringan bo'ladi.
-GET http://localhost:8080/api/v1/patient/qr/7ffe334d-7c50-47a1-95f9-5d1965eabc76
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfQURNSU4iLCJpZCI6IjEiLCJpYXQiOjE3NzA0NDAxMzcsImV4cCI6MTc3MDUyNjUzN30.vd1ZFiWCIr2_OMIlxCU1pUruISQVBvUQhbG5dwiyheMQ8EO3kWGDtRll3KKnKpPwv0tW91D81yhGKYl4lpjrwA
+GET http://localhost:8080/api/v1/patient/qr/1acc1c49-8b2f-4cff-ad05-d0191f8e01a9
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5MTE1NzY3NzciLCJyb2xlcyI6IlJPTEVfVVNFUixST0xFX1NVUEVSQURNSU4sUk9MRV9BRE1JTiIsImlkIjoiMSIsImlhdCI6MTc3MjI3MjAxMywiZXhwIjoxNzcyMzU4NDEzfQ.oUiUguFtFj6VRsdByoNaNCfLTdp-bfqsf_o_C6EWIslPD53oJmwFhj6t3AK9P-2PnCgBbaFuVah6d4QT7_6uhA
 Accept: image/png
 
 # >>>> MUHIM QADAM <<<<
@@ -24,11 +24,10 @@ Accept: image/png
 # 2-QADAM: SHIFOKOR SIFATIDA MA'LUMOTNI O'QISH (Public API)
 # -------------------------------------------------------------------------
 # Bu yerga bazadan olgan tokenni qo'ying
-@qrToken = 11GKSa
 
 ### Bu so'rovda Authorization (Token) SHART EMAS!
 # Chunki shifokor login qilmaydi.
-GET http://localhost:8080/api/v1/public/qr/info/11GKSa
+GET http://localhost:8080/api/v1/public/qr/info/zFV8ny
 Content-Type: application/json
 
 ### KUTILAYOTGAN NATIJA (JSON):

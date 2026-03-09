@@ -17,7 +17,7 @@
     width: 25px;
     height: 25px;
     display: inline-block;
-    background-image: url("../../images/arrow3.svg");
+    background-image: url("../images/arrow3.svg");
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 12px;
@@ -69,7 +69,7 @@
 
 .post_basket__btn {
     position: absolute;
-    background-image: url(../../../images/basket.svg);
+    background-image: url("../images/basket.svg");
     background-position: center center;
     background-repeat: no-repeat;
     background-color: #ffffff;
@@ -107,7 +107,7 @@
     border-radius: 50%;
 }
 
-.add_content__btn:hover{
+.add_content__btn:hover {
     cursor: pointer;
 }
 

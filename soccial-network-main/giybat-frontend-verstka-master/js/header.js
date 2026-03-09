@@ -10,7 +10,7 @@ function toggleLanguageDropdown() {
 // Set language function
 function setSelectedLanguage(lang) {
     document.getElementById("current-lang").textContent = lang;
-    localStorage.setItem("current-lang",lang);
+    localStorage.setItem("current-lang", lang);
     toggleLanguageDropdown(); // Закрыть dropdown после выбора
 }
 
@@ -44,35 +44,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // select language
     let currentLang = localStorage.getItem('current-lang');
-    if (!currentLang){
+    if (!currentLang) {
         currentLang = "UZ";
     }
     localStorage.setItem("current-lang", currentLang)
-    if (currentLang){
+    if (currentLang) {
         document.getElementById("current-lang").textContent = currentLang;
     }
 
     //Show profile menu on header
     const userDetailStr = localStorage.getItem("userDetail");
-    if (userDetailStr === null || userDetailStr === undefined || userDetailStr === '') {
-        // window.location.href = "./404.html"
+    if (!userDetailStr) {
         return;
     }
-    const userDetail = JSON.parse(userDetailStr);
-    const userName = userDetail.name;
-    const userImg = userDetail.photo.url;
 
-    const loginBtn = document.getElementById("header_btn");
-    loginBtn.style.display = "none";
-    const menuUserDetailWrapper = document.getElementById("header_entrance");
-    menuUserDetailWrapper.style.display = "block";
+    try {
+        const userDetail = JSON.parse(userDetailStr);
+        if (userDetail) {
+            const userName = userDetail.name || "Foydalanuvchi";
+            const loginBtn = document.getElementById("header_btn");
+            if (loginBtn) loginBtn.style.display = "none";
 
-    const headerUserNameSpan = document.getElementById("header_user_name_id");
-    headerUserNameSpan.textContent = userName;
+            const menuUserDetailWrapper = document.getElementById("header_entrance");
+            if (menuUserDetailWrapper) menuUserDetailWrapper.style.display = "block";
 
-    if (userDetail.photo){
-        const headerUserImage = document.getElementById("header_user_image_id");
-        headerUserImage.src = userImg;
+            const headerUserNameSpan = document.getElementById("header_user_name_id");
+            if (headerUserNameSpan) headerUserNameSpan.textContent = userName;
+
+            if (userDetail.photo && userDetail.photo.url) {
+                const headerUserImage = document.getElementById("header_user_image_id");
+                if (headerUserImage) {
+                    headerUserImage.src = userDetail.photo.url;
+                }
+            }
+        }
+    } catch (e) {
+        console.error("User detail formatida xatolik:", e);
     }
 
     // search input
@@ -87,9 +94,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const searchInput = document.getElementById("header-search-inputId")
-    if (searchInput){
-        searchInput.addEventListener("keypress",(e) => {
-            if (e.key === "Enter"){
+    if (searchInput) {
+        searchInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
                 e.preventDefault()
                 if (searchInput.value) {
                     window.location.href = "./search-result-page.html?query=" + searchInput.value;

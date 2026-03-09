@@ -93,7 +93,7 @@
   position: absolute;
   width: 20px;
   height: 20px;
-  background-image: url("../../images/search.svg");
+  background-image: url("../images/search.svg");
   background-size: 20px 20px;
   top: 50%;
   right: 24px;
@@ -112,10 +112,12 @@
   padding: 10px;
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex; /* Flexbox для выравнивания */
+  display: flex;
+  /* Flexbox для выравнивания */
   -webkit-box-align: center;
   -ms-flex-align: center;
-  align-items: center; /* Вертикальное выравнивание по центру */
+  align-items: center;
+  /* Вертикальное выравнивание по центру */
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
   justify-content: space-between;
@@ -144,17 +146,18 @@
   -webkit-transition: -webkit-transform 0.3s ease;
   transition: -webkit-transform 0.3s ease;
   transition: transform 0.3s ease;
-  transition: transform 0.3s ease, -webkit-transform 0.3s ease; /* Плавная анимация вращения */
+  transition: transform 0.3s ease, -webkit-transform 0.3s ease;
+  /* Плавная анимация вращения */
   -webkit-transform-origin: center;
-  transform-origin: center; /* Точка вращения в центре */
+  transform-origin: center;
+  /* Точка вращения в центре */
 }
 
 /* Вращаем стрелку снизу вверх при открытии меню */
 .dropdown_toggle.active .arrow {
   -webkit-transform: rotateX(180deg);
-  transform: rotateX(
-    180deg
-  ); /* Вращение по оси X на 180 градусов снизу вверх */
+  transform: rotateX(180deg);
+  /* Вращение по оси X на 180 градусов снизу вверх */
 }
 
 .dropdown-content {
@@ -172,7 +175,8 @@
   line-height: 20.16px;
   padding: 14px 24px;
   cursor: pointer;
-  text-align: center; /* Центрирование текста */
+  text-align: center;
+  /* Центрирование текста */
 }
 
 .dropdown-content div:hover {
@@ -191,21 +195,32 @@
 }
 
 .header_btn {
-  background-color: #255cd2; /* Синий цвет фона */
-  color: #ffffff; /* Цвет текста */
-  padding: 10px 68px; /* Отступы внутри кнопки */
-  border: none; /* Убираем рамку */
-  border-radius: 30px; /* Закругленные углы */
+  background-color: #255cd2;
+  /* Синий цвет фона */
+  color: #ffffff;
+  /* Цвет текста */
+  padding: 10px 68px;
+  /* Отступы внутри кнопки */
+  border: none;
+  /* Убираем рамку */
+  border-radius: 30px;
+  /* Закругленные углы */
   font-weight: 400;
-  font-size: 16px; /* Размер шрифта */
+  font-size: 16px;
+  /* Размер шрифта */
   line-height: 20.16px;
-  cursor: pointer; /* Курсор при наведении */
-  text-align: center; /* Центрирование текста */
-  display: inline-block; /* Блочный элемент в строке */
+  cursor: pointer;
+  /* Курсор при наведении */
+  text-align: center;
+  /* Центрирование текста */
+  display: inline-block;
+  /* Блочный элемент в строке */
   -webkit-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Легкая тень */
   -webkit-transition: background-color 0.3s ease;
-  transition: background-color 0.3s ease; /* Плавный переход фона при наведении */
+  transition: background-color 0.3s ease;
+  /* Плавный переход фона при наведении */
   /* display: none; */
 }
 
@@ -271,10 +286,11 @@
   display: block;
 }
 
-.header_user_image{
+.header_user_image {
   width: 24px;
   height: 24px;
 }
+
 /* Menu end*/
 
 .header_entrance__block {
@@ -344,7 +360,8 @@
 }
 
 .header_btn:hover {
-  background-color: #165cbb; /* Изменение фона при наведении */
+  background-color: #165cbb;
+  /* Изменение фона при наведении */
 }
 
 @media screen and (max-width: 1100px) {
@@ -377,7 +394,7 @@
   .header_burger {
     width: 18px;
     height: 16px;
-    background-image: url("../../images/burger.svg");
+    background-image: url("../images/burger.svg");
     background-repeat: no-repeat;
     background-position: center center;
     display: block;

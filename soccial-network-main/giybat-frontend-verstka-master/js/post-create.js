@@ -88,59 +88,49 @@ async function uploadImage() {
         const lang = document.getElementById("current-lang").textContent;
 
         return fetch('http://localhost:8080/api/v1/attach/upload', {
-             method: 'POST',
-             headers: {
-                 'Accept-Language': lang,
-                 'Authorization': 'Bearer ' + jwt
-             },
-             body: formData
-         })
-             .then(response => {
-                 if (!response.ok) {
-                     throw new Error('Network response was not ok');
-                 }
-                 return response.json();
-             })
-             .then(data => {
-                 if (data.id) {
-                     return data.id;
-                 }
-             })
-             .catch(error => {
-                 console.error('Error:', error);
-                 return null;
-             });
+            method: 'POST',
+            headers: {
+                'Accept-Language': lang,
+                'Authorization': 'Bearer ' + jwt
+            },
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.id) {
+                    return data.id;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                return null;
+            });
     }
 }
 
-window.onload = function (){
-    var url_string = window.location.href;
-    var url = new URL(url_string);
-    var idParam = url.searchParams.get("id");
-    if (idParam){
-        getPostById(idParam);
-
-        document.getElementById("post_create_btn_group").classList.add("display-none")
-        document.getElementById("post_update_btn_group").classList.remove("display-none")
-        document.getElementById("post_page_title_id").textContent = "Postni o'zgartirish"
-    }
-}
 window.addEventListener("DOMContentLoaded", function () {
-    var url_string = window.location.href; // www.test.com?id=dasdasd
-    var url = new URL(url_string);
-    var id = url.searchParams.get("id");
-    if (id) {
-        // getPostById(id);
-        // document.getElementById("post_create_btn_group").classList.add("display-none");
-        // document.getElementById("post_update_btn_group").classList.remove("display-none");
-        // document.getElementById("post_page_title_id").textContent = 'G\'iybatni o\'zgartirsh';
+    const url_string = window.location.href;
+    const url = new URL(url_string);
+    const idParam = url.searchParams.get("id");
+
+    if (idParam) {
+        getPostById(idParam);
+        document.getElementById("post_create_btn_group").classList.add("display-none");
+        document.getElementById("post_update_btn_group").classList.remove("display-none");
+        document.getElementById("post_page_title_id").textContent = "G'iybatni o'zgartirish";
     }
 });
 
 function getPostById(idParam) {
-    const lang = document.getElementById("current-lang").textContent;
+    const langElement = document.getElementById("current-lang");
+    const lang = langElement ? langElement.textContent : "UZ";
 
-    return fetch('http://localhost:8080/api/v1/posts/public/'+idParam, {
+    return fetch('http://localhost:8080/api/v1/posts/public/' + idParam, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -150,26 +140,32 @@ function getPostById(idParam) {
         .then(response => {
             if (response.ok) {
                 return response.json();
-            }else {
-                return Promise.reject(response.text());
+            } else {
+                return response.text().then(text => Promise.reject(text));
             }
         })
         .then(data => {
-            console.log(data)
+            console.log("Post ma'lumotlari yuklandi:", data);
             currentPost = data;
-            //photo
-            if(data.photo && data.photo.url) {
+
+            // Sarlavha va kontentni to'ldirish
+            const titleInput = document.getElementById("post_title_id");
+            const contentArea = document.getElementById("post_content_id");
+
+            if (titleInput) titleInput.value = data.title || "";
+            if (contentArea) contentArea.value = data.content || "";
+
+            // Rasm preview
+            if (data.photo && data.photo.url) {
                 const imgContainer = document.getElementById('post_image_block');
-                imgContainer.style.backgroundImage = 'url(' + data.photo.url + ')';
+                if (imgContainer) {
+                    imgContainer.style.backgroundImage = 'url(' + data.photo.url + ')';
+                }
             }
-            document.getElementById("post_title_id").value = data.title;
-            document.getElementById("post_content_id").value = data.content;
         })
         .catch(error => {
-            console.error('Error:', error);
-            return null;
+            console.error('Postni yuklashda xatolik:', error);
         });
-
 }
 
 async function updatePost() {
@@ -184,7 +180,7 @@ async function updatePost() {
     if (file) {
         imageId = await uploadImage();
     } else {
-        imageId = currentPost.photo.id;
+        imageId = (currentPost.photo && currentPost.photo.id) ? currentPost.photo.id : null;
     }
 
     const titleValue = document.getElementById("post_title_id").value;
