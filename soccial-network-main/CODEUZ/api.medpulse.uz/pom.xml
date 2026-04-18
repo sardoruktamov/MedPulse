@@ -118,6 +118,14 @@
 			<artifactId>javase</artifactId>
 			<version>3.5.1</version>
 		</dependency>
+		<!--		real-time chat-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+			<version>4.0.3</version>
+			<scope>compile</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
